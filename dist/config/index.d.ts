@@ -5,7 +5,9 @@ declare const _default: () => {
     };
     botToken: string;
     report: {
-        chatId: string;
+        reportChatId: string;
+        employersChatId: string;
+        testChatId: string;
         reportPath: string;
     };
 };

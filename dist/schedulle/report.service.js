@@ -20,6 +20,7 @@ const schedule_1 = require("@nestjs/schedule");
 const nestjs_telegraf_1 = require("nestjs-telegraf");
 const telegraf_1 = require("telegraf");
 const fs = require("fs");
+const files_utils_1 = require("../utils/files.utils");
 let DayReportService = DayReportService_1 = class DayReportService {
     constructor(bot, configService) {
         this.bot = bot;
@@ -28,30 +29,88 @@ let DayReportService = DayReportService_1 = class DayReportService {
     }
     async handleCron() {
         try {
-            const chatId = this.configService.get('report.chatId');
-            const filePath = this.configService.get('report.reportPath');
-            this.bot.telegram.sendMessage(chatId, new Date().toISOString());
-            this.bot.telegram.sendDocument(chatId, {
-                source: fs.readFileSync(filePath),
-                filename: `${new Date().toLocaleDateString('ru_RU', {
-                    dateStyle: 'medium',
-                })}_report.xlsx`,
+            const chatId = this.configService.get('report.reportChatId');
+            const dirPath = this.configService.get('report.reportPath');
+            const url = new URL(dirPath);
+            fs.readdir(url, (err, files) => {
+                if (err)
+                    throw err;
+                this.bot.telegram.sendMessage(chatId, `Отчет за ${new Date().toLocaleDateString(undefined, { dateStyle: 'short' })}`);
+                files.forEach(file => {
+                    if ((0, files_utils_1.allowedNames)(['sales_report', 'Сводный'], file)) {
+                        this.sendFile(dirPath, file, chatId);
+                    }
+                });
             });
-            this.logger.debug(`Report for ${new Date().toLocaleDateString('ru_RU', {
-                dateStyle: 'medium',
-            })} is sending`);
         }
-        catch (error) {
-            new common_1.Logger(error.message);
+        catch (er) {
+            console.log(er);
         }
+    }
+    async scheduleCron() {
+        try {
+            const chatId = this.configService.get('report.employersChatId');
+            const dirPath = this.configService.get('report.reportPath');
+            const url = new URL(dirPath);
+            fs.readdir(url, (err, files) => {
+                if (err)
+                    throw err;
+                this.bot.telegram.sendMessage(chatId, `Расписание на завтра`);
+                files.forEach(file => {
+                    if ((0, files_utils_1.allowedNames)(['schedule_tomorrow'], file)) {
+                        this.sendFile(dirPath, file, chatId);
+                    }
+                });
+            });
+        }
+        catch (er) {
+            console.log(er);
+        }
+    }
+    async handleTest() {
+        try {
+            const chatId = this.configService.get('report.testChatId');
+            const dirPath = this.configService.get('report.reportPath');
+            const url = new URL(dirPath);
+            fs.readdir(url, (err, files) => {
+                if (err)
+                    throw err;
+                files.forEach(file => {
+                    if ((0, files_utils_1.allowedNames)(['schedule_today'], file)) {
+                        this.sendFile(dirPath, file, chatId);
+                    }
+                });
+            });
+        }
+        catch (er) {
+            console.log(er);
+        }
+    }
+    sendFile(dirPath, fileName, chatId) {
+        fs.readFile(new URL(dirPath + fileName), ((err, data) => {
+            if (err)
+                throw err;
+            this.bot.telegram.sendDocument(chatId, {
+                source: data,
+                filename: `${new Date().toLocaleDateString(undefined, {
+                    dateStyle: 'short',
+                })}_${fileName}`,
+            });
+        }));
     }
 };
 __decorate([
-    (0, schedule_1.Cron)('00 05 20 * * *'),
+    (0, schedule_1.Cron)('00 10 20 * * *'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], DayReportService.prototype, "handleCron", null);
+__decorate([
+    (0, schedule_1.Cron)('00 50 19 * * *'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], DayReportService.prototype, "scheduleCron", null);
 DayReportService = DayReportService_1 = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, nestjs_telegraf_1.InjectBot)()),

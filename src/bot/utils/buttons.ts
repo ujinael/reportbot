@@ -6,6 +6,12 @@ export const actionButtons = () => {
     Markup.button.callback('транзакции', 'transactions_btn'),
   ]);
 };
+export const schedulleButtons = () => {
+  return Markup.inlineKeyboard([
+    Markup.button.callback('Cегодня', 'schedule_today'),
+    Markup.button.callback('Завтра', 'schedule_tomorrow'),
+  ]);
+};
 export const defaultButtons = () => {
   return Markup.inlineKeyboard([]);
 };

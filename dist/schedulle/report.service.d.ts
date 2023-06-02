@@ -7,4 +7,7 @@ export declare class DayReportService {
     constructor(bot: Telegraf<TelegrafContext>, configService: ConfigService);
     private readonly logger;
     handleCron(): Promise<void>;
+    scheduleCron(): Promise<void>;
+    handleTest(): Promise<void>;
+    sendFile(dirPath: string, fileName: string, chatId: string): void;
 }
