@@ -1,4 +1,4 @@
-import { Action, Ctx, Message, Scene, SceneEnter } from 'nestjs-telegraf';
+import { Action, Ctx, Scene, SceneEnter } from 'nestjs-telegraf';
 import { SceneContext } from 'telegraf/typings/scenes';
 import { restScheduleButtons } from 'src/bot/utils/buttons';
 import { ConfigService } from '@nestjs/config';
@@ -18,12 +18,9 @@ export class TGSchedulleScene {
     ctx.reply('Выберите период', restScheduleButtons());
   }
   @Action('rest_schedule_today')
-  async onRestScheduleToday(
-    @Ctx() ctx: SceneContext,
-    @Message() msg: Record<string | symbol, any>,
-  ) {
+  async onRestScheduleToday(@Ctx() ctx: SceneContext) {
     try {
-      const startDate = new Date(2023, 3, 30);
+      const startDate = new Date();
       startDate.setUTCHours(1, 0, 0, 0);
       const endDate = new Date(startDate.getTime());
       endDate.setUTCHours(21, 0, 59, 0);
@@ -46,12 +43,9 @@ export class TGSchedulleScene {
     }
   }
   @Action('rest_schedule_tomorrow')
-  async onRestScheduleTomorrow(
-    @Ctx() ctx: SceneContext,
-    @Message() msg: Record<string | symbol, any>,
-  ) {
+  async onRestScheduleTomorrow(@Ctx() ctx: SceneContext) {
     try {
-      const startDate = new Date(new Date(2023, 3, 30).getTime() + 864e5);
+      const startDate = new Date(Date.now() + 864e5);
       startDate.setUTCHours(1, 0, 0, 0);
       const endDate = new Date(startDate.getTime());
       endDate.setUTCHours(21, 0, 59, 0);
@@ -73,10 +67,7 @@ export class TGSchedulleScene {
     }
   }
   @Action('schedule_today')
-  async onScheduleToday(
-    @Ctx() ctx: SceneContext,
-    @Message() msg: Record<string | symbol, any>,
-  ) {
+  async onScheduleToday(@Ctx() ctx: SceneContext) {
     try {
       if (ctx.callbackQuery.message)
         await ctx.deleteMessage(ctx.callbackQuery.message.message_id);
@@ -98,10 +89,7 @@ export class TGSchedulleScene {
   }
 
   @Action('schedule_tomorrow')
-  async onScheduleTomorrow(
-    @Ctx() ctx: SceneContext,
-    @Message() msg: Record<string | symbol, any>,
-  ) {
+  async onScheduleTomorrow(@Ctx() ctx: SceneContext) {
     try {
       if (ctx.callbackQuery.message)
         await ctx.deleteMessage(ctx.callbackQuery.message.message_id);

@@ -4,7 +4,6 @@ import { UpdateMedicalRequestDto } from './dto/update-medical_request.dto';
 import { HttpService } from '@nestjs/axios';
 import { RequestFilter } from './entities/filter_params.interface';
 import { MedicalRequest } from './entities/medical_request.entity';
-import { error } from 'console';
 import { lastValueFrom, map } from 'rxjs';
 import { plainToInstance } from 'class-transformer';
 import { OutputEmployerDto } from 'src/employer/dto/output-employer.dto';
@@ -50,7 +49,7 @@ export class MedicalRequestService {
     }
   }
   groupByEmployer(requests: MedicalRequest[]) {
-    return requests.reduce<OutputEmployerDto[]>((prev, current, array) => {
+    return requests.reduce<OutputEmployerDto[]>((prev, current) => {
       const pretender = prev.find((emp) => emp.id === current.employer.id);
       if (pretender) {
         pretender.medicalRequests.push(current);
