@@ -20,7 +20,7 @@ export const fromRequest = (request: MedicalRequest) => {
     0,
   )}${request.client.patronimyc.at(0)}${fromNomenclature(
     request.nomenclature,
-  )}`;
+  )}${request.note ? '\n***' + request.note + '***' : ''}`;
 };
 export const fromNomenclature = (items: NomenclatureItem[]) => {
   return items.length

@@ -28,6 +28,7 @@ export class MedicalRequestService {
         .toISOString()
         .replace(/\.(.*)/g, '')
         .trim();
+
       const observ = this.httpModule
         .get<MedicalRequest[]>('/medical_requests', {
           params: {
