@@ -1,8 +1,10 @@
 import { Module } from '@nestjs/common';
-import { DayReportService } from './report.service';
+import { TGSchedulleScene } from './schedulle.scene';
 import { MedicalRequestModule } from 'src/medical_request/medical_request.module';
+
 @Module({
   imports: [MedicalRequestModule],
-  providers: [DayReportService],
+  providers: [TGSchedulleScene],
+  exports: [TGSchedulleScene],
 })
-export class ReportModule {}
+export class TGSchedulleModule {}
