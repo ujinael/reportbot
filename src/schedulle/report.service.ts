@@ -6,7 +6,7 @@ import { TelegrafContext } from 'src/bot/entities/telegraf_context.entity';
 import { Telegraf } from 'telegraf';
 import * as fs from 'fs';
 import { allowedNames } from 'src/utils/files.utils';
-import { MedicalRequestService } from 'src/medical_request/medical_request.service';
+import { MedicalRequestService } from '../medical_request/medical_request.service';
 import { fromEmployersRequests } from 'src/bot/utils/templates';
 
 @Injectable()
