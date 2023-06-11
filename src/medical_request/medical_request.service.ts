@@ -30,7 +30,7 @@ export class MedicalRequestService {
         .trim();
 
       const observ = this.httpModule
-        .get<MedicalRequest[]>('/medical_requests', {
+        .get<MedicalRequest[]>('/medical_requests/list', {
           params: {
             start_date: startDate,
             end_date: endDate,
