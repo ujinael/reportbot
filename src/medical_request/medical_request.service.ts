@@ -34,6 +34,7 @@ export class MedicalRequestService {
           params: {
             start_date: startDate,
             end_date: endDate,
+            employer_id: filter.employer_id,
           },
         })
         .pipe(map((resp) => plainToInstance(MedicalRequest, resp.data)));
@@ -42,6 +43,7 @@ export class MedicalRequestService {
     } catch (error) {
       throw new HttpException(
         {
+          reason: 'findByParams',
           status: HttpStatus.UNPROCESSABLE_ENTITY,
           errorText: (<Error>error).message,
         },
