@@ -13,6 +13,7 @@ import { NomenclatureItemModule } from './nomenclature_item/nomenclature_item.mo
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './user/user.module';
 import { User } from './user/entities/user.entity';
+import { CalltouchModule } from './calltouch/calltouch.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -40,6 +41,7 @@ import { User } from './user/entities/user.entity';
     ClientModule,
     NomenclatureItemModule,
     UserModule,
+    CalltouchModule,
   ],
   controllers: [AppController],
   providers: [AppService],

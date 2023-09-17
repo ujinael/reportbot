@@ -14,4 +14,10 @@ export default () => ({
     testChatId: process.env.TEST_CHAT_ID,
     reportPath: process.env.REPORT_PATH,
   },
+  calltouch: {
+    clientId: process.env.CALLTOUCH_CLIENT_ID,
+    token: process.env.CALLTOUCH_TOKEN,
+    counter: process.env.CALLTOUCH_COUNTER,
+    host: process.env.CALLTOUCH_HOST,
+  },
 });

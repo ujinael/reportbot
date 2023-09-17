@@ -2,12 +2,12 @@ import { Module } from '@nestjs/common';
 import { MedicalRequestService } from './medical_request.service';
 import { MedicalRequestController } from './medical_request.controller';
 import { HttpModule } from '@nestjs/axios';
-import { HttpConfigService } from 'src/http';
+import { HttpOneSConfigService } from 'src/http';
 
 @Module({
   imports: [
     HttpModule.registerAsync({
-      useClass: HttpConfigService,
+      useClass: HttpOneSConfigService,
     }),
   ],
 
