@@ -21,13 +21,15 @@ export class TgBotUpdate {
     @Message() msg: Record<string | symbol, any>,
   ) {
     try {
-      // await ctx.deleteMessage(msg.id);
+       if(msg)
+        await ctx.deleteMessage(msg.id);
       const testChatId = this.configService.get<string>('report.testChatId');
       const employersChatId = this.configService.get<string>(
         'report.employersChatId',
       );
       if (ctx.chat.id === +employersChatId) {
         await ctx.scene.enter('schedulleScene');
+        return
       }
       // if (ctx.chat.id === +testChatId) {
       //   await ctx.scene.enter('schedulleScene');

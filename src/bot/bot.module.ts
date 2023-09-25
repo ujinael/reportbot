@@ -6,6 +6,8 @@ import { TgBotUpdate } from './bot.update';
 import { MedicalRequestModule } from 'src/medical_request/medical_request.module';
 import { TGSchedulleModule } from './scenes/schedulle/schedulle.module';
 import { TGDoctorModule } from './scenes/doctor/doctor.module';
+import { TGUploadPhotoModule } from './scenes/upload_photo/upload_photo.module';
+import { TGClientCardModule } from './scenes/client_card/client_card.module';
 
 @Module({
   imports: [
@@ -19,7 +21,10 @@ import { TGDoctorModule } from './scenes/doctor/doctor.module';
     UserModule,
     TGSchedulleModule,
     TGDoctorModule,
+    TGUploadPhotoModule,
+    TGClientCardModule,
     MedicalRequestModule,
+
   ],
   providers: [TgBotUpdate],
 })

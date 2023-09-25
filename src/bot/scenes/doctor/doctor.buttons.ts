@@ -12,3 +12,4 @@ export const doctorRequestButtons = () => {
     Markup.button.callback('Завтра', 'schedule_tomorrow'),
   ]);
 };
+

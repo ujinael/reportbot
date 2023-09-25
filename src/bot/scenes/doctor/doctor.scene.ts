@@ -1,10 +1,12 @@
 import { UserService } from './../../../user/user.service';
-import { Action, Ctx, Scene, SceneEnter } from 'nestjs-telegraf';
+import { Action, Ctx, Message, On, Scene, SceneEnter, TextLink, Url } from 'nestjs-telegraf';
 import { SceneContext } from 'telegraf/typings/scenes';
 import { doctorRequestButtons, doctorSceneButtons } from './doctor.buttons';
 import { MedicalRequestService } from 'src/medical_request/medical_request.service';
 import { ConfigService } from '@nestjs/config';
 import { fromRequest } from 'src/bot/utils/templates';
+import { Context, Markup } from 'telegraf';
+import { ClientService } from 'src/client/client.service';
 @Scene('doctorScene')
 export class TGDoctorScene {
   constructor(
@@ -27,16 +29,30 @@ export class TGDoctorScene {
     }
   }
   @Action('my_request_action')
-  async onMyRequests(@Ctx() ctx: SceneContext) {
+  async onMyRequests(@Ctx() ctx: SceneContext,@Message() msg: Record<string | symbol, any>) {
     try {
+      if(msg)
+      await ctx.deleteMessage(msg.id);
       ctx.reply('Выберите период', doctorRequestButtons());
     } catch (er) {
       console.log(er);
     }
   }
-  @Action('schedule_today')
-  async onScheduleToday(@Ctx() ctx: SceneContext) {
+  @Action([/client-(.*)/])
+  async onTaskAction(@Ctx() ctx: SceneContext) {
     try {
+      //@ts-ignore
+const clientId = ctx.match[1];
+      ctx.scene.enter('uploadPhotoScene',{clientId})
+    } catch (er) {
+      console.log(er);
+    }
+  }
+  @Action('schedule_today')
+  async onScheduleToday(@Ctx() ctx: SceneContext, @Message() msg:Record<string,any>) {
+    try {
+      if(msg)
+      await ctx.deleteMessage(msg.id);
       const startDate = new Date();
       startDate.setUTCHours(1, 0, 0, 0);
       const endDate = new Date(startDate.getTime());
@@ -47,7 +63,6 @@ export class TGDoctorScene {
         endDate,
         employer_id,
       });
-
       ctx.sendMessage(
         `⌛️Расписание на ${startDate.toLocaleDateString(undefined, {
           dateStyle: 'short',
@@ -90,7 +105,8 @@ export class TGDoctorScene {
   @Action('patient_card_action')
   async onPatientCard(@Ctx() ctx: SceneContext) {
     try {
-      await ctx.sendMessage('Card TODO');
+      const employerId = ctx.scene.state['employerId']
+      await ctx.scene.enter('clientCardScene',{employerId})
     } catch (er) {
       console.log(er);
     }

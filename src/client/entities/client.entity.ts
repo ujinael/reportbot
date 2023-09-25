@@ -7,4 +7,8 @@ export class Client {
   @Expose({ name: 'last_name' })
   lastName: string;
   patronimyc: string;
+
+  get fullTitle(){
+    return `${this.lastName} ${this.firstName} ${this.patronimyc}`
+  }
 }

@@ -9,17 +9,19 @@ import {
   Query,
   HttpException,
   HttpStatus,
+  HttpCode,
 } from '@nestjs/common';
 import { LeadsService } from './leads.service';
 import { CreateLeadDto } from './dto/create-lead.dto';
 import { UpdateLeadDto } from './dto/update-lead.dto';
+import { CallTouchLeadDto } from './dto/calltouch-lead.dto';
 
 @Controller('leads')
 export class LeadsController {
-  constructor(private readonly leadsService: LeadsService) {}
-
+  constructor(private readonly leadsService: LeadsService) { }
+  @HttpCode(HttpStatus.OK)
   @Post()
-  create(@Body() createLeadDto: CreateLeadDto) {
+  create(@Body() createLeadDto: CallTouchLeadDto) {
     return this.leadsService.create(createLeadDto);
   }
 

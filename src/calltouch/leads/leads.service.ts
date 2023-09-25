@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { CreateLeadDto } from './dto/create-lead.dto';
 import { UpdateLeadDto } from './dto/update-lead.dto';
 import { HttpService } from '@nestjs/axios';
@@ -7,6 +7,7 @@ import { CallsService } from '../calls/calls.service';
 import { RequestsService } from '../requests/requests.service';
 import { callToLeadMapper } from './mappers/call_to_lead.mapper';
 import { requestToLeadMapper } from './mappers/request_to_lead.mapper';
+import { CallTouchLeadDto } from './dto/calltouch-lead.dto';
 
 @Injectable()
 export class LeadsService {
@@ -15,9 +16,10 @@ export class LeadsService {
     private readonly configService: ConfigService,
     private readonly callsService: CallsService,
     private readonly requestsService: RequestsService,
-  ) {}
-  create(createLeadDto: CreateLeadDto) {
-    return 'This action adds a new lead';
+  ) { }
+  create(createLeadDto: CallTouchLeadDto) {
+    Logger.log(createLeadDto)
+    return HttpStatus.OK;
   }
 
   async findAll(dateFrom: string, dateTo: string) {
