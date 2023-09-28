@@ -15,6 +15,7 @@ import { LeadsService } from './leads.service';
 import { CreateLeadDto } from './dto/create-lead.dto';
 import { UpdateLeadDto } from './dto/update-lead.dto';
 import { CallTouchLeadDto } from './dto/calltouch-lead.dto';
+import { ILead } from './entities/lead.entity';
 
 @Controller('leads')
 export class LeadsController {
@@ -26,7 +27,7 @@ export class LeadsController {
   }
 
   @Get()
-  findAll(@Query() query: { dateFrom: string; dateTo: string }) {
+  findAll(@Query() query: { dateFrom: string; dateTo: string }): Promise<ILead[]> {
     try {
       if (query.dateFrom === undefined && query.dateTo === undefined)
         throw Error('params dateFrom & dateTo required');
