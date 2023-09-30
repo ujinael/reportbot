@@ -24,7 +24,6 @@ import { TGClientCardModule } from './scenes/client_card/client_card.module';
     TGUploadPhotoModule,
     TGClientCardModule,
     MedicalRequestModule,
-
   ],
   providers: [TgBotUpdate],
 })

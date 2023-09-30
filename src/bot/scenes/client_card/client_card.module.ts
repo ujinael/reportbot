@@ -6,7 +6,12 @@ import { TGClientCardScene } from './client_card.scene';
 import { ClientModule } from 'src/client/client.module';
 
 @Module({
-  imports: [MedicalRequestModule, UserModule,ClientModule,HttpModule.register({})],
+  imports: [
+    MedicalRequestModule,
+    UserModule,
+    ClientModule,
+    HttpModule.register({}),
+  ],
   providers: [TGClientCardScene],
   exports: [TGClientCardScene],
 })

@@ -17,4 +17,4 @@ import { CallsModule } from '../calls/calls.module';
   controllers: [LeadsController],
   providers: [LeadsService],
 })
-export class LeadsModule { }
+export class LeadsModule {}

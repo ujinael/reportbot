@@ -7,6 +7,10 @@ import { fromEmployersRequests } from 'src/bot/utils/templates';
 import * as fs from 'fs';
 import { Context } from 'telegraf';
 import { allowedNames } from 'src/utils/files.utils';
+import {
+  MedicalRequestsToTgMedicalRequests,
+  TgMedicalRequestsToEmployersWithRequestsMapper,
+} from '@/bot/mappers';
 @Scene('schedulleScene')
 export class TGSchedulleScene {
   constructor(
@@ -25,15 +29,19 @@ export class TGSchedulleScene {
       const endDate = new Date(startDate.getTime());
       endDate.setUTCHours(21, 0, 59, 0);
 
-      const requests = await this.medicalRequestService.findByParams({
-        startDate,
-        endDate,
-      });
-      const employers = this.medicalRequestService.groupByEmployer(requests);
+      const requests = await this.medicalRequestService
+        .findByParams({
+          startDate,
+          endDate,
+        })
+        .then((resp) => new MedicalRequestsToTgMedicalRequests(resp).mapTo());
+
+      const employersWithRequests =
+        new TgMedicalRequestsToEmployersWithRequestsMapper(requests).mapTo();
       ctx.sendMessage(
         `⌛️Расписание на ${startDate.toLocaleDateString(undefined, {
           dateStyle: 'short',
-        })}\n\n` + fromEmployersRequests(employers),
+        })}\n\n` + fromEmployersRequests(employersWithRequests),
         {
           parse_mode: 'HTML',
         },
@@ -49,15 +57,18 @@ export class TGSchedulleScene {
       startDate.setUTCHours(1, 0, 0, 0);
       const endDate = new Date(startDate.getTime());
       endDate.setUTCHours(21, 0, 59, 0);
-      const requests = await this.medicalRequestService.findByParams({
-        startDate,
-        endDate,
-      });
-      const employers = this.medicalRequestService.groupByEmployer(requests);
+      const requests = await this.medicalRequestService
+        .findByParams({
+          startDate,
+          endDate,
+        })
+        .then((resp) => new MedicalRequestsToTgMedicalRequests(resp).mapTo());
+      const employersWithRequests =
+        new TgMedicalRequestsToEmployersWithRequestsMapper(requests).mapTo();
       ctx.sendMessage(
         `⌛️Расписание на ${startDate.toLocaleDateString(undefined, {
           dateStyle: 'short',
-        })}\n\n` + fromEmployersRequests(employers),
+        })}\n\n` + fromEmployersRequests(employersWithRequests),
         {
           parse_mode: 'HTML',
         },

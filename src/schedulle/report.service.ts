@@ -8,6 +8,10 @@ import * as fs from 'fs';
 import { allowedNames } from 'src/utils/files.utils';
 import { MedicalRequestService } from '../medical_request/medical_request.service';
 import { fromEmployersRequests } from 'src/bot/utils/templates';
+import {
+  MedicalRequestsToTgMedicalRequests,
+  TgMedicalRequestsToEmployersWithRequestsMapper,
+} from '@/bot/mappers';
 
 @Injectable()
 export class DayReportService {
@@ -51,16 +55,19 @@ export class DayReportService {
       startDate.setUTCHours(1, 0, 0, 0);
       const endDate = new Date(startDate.getTime());
       endDate.setUTCHours(21, 0, 59, 0);
-      const requests = await this.medicalRequestService.findByParams({
-        startDate,
-        endDate,
-      });
-      const employers = this.medicalRequestService.groupByEmployer(requests);
+      const requests = await this.medicalRequestService
+        .findByParams({
+          startDate,
+          endDate,
+        })
+        .then((resp) => new MedicalRequestsToTgMedicalRequests(resp).mapTo());
+      const employersWithRequests =
+        new TgMedicalRequestsToEmployersWithRequestsMapper(requests).mapTo();
       this.bot.telegram.sendMessage(
         chatId,
         `⌛️Расписание на ${startDate.toLocaleDateString(undefined, {
           dateStyle: 'short',
-        })}\n\n` + fromEmployersRequests(employers),
+        })}\n\n` + fromEmployersRequests(employersWithRequests),
         {
           parse_mode: 'HTML',
         },
@@ -78,16 +85,19 @@ export class DayReportService {
       startDate.setUTCHours(1, 0, 0, 0);
       const endDate = new Date(startDate.getTime());
       endDate.setUTCHours(21, 0, 59, 0);
-      const requests = await this.medicalRequestService.findByParams({
-        startDate,
-        endDate,
-      });
-      const employers = this.medicalRequestService.groupByEmployer(requests);
+      const requests = await this.medicalRequestService
+        .findByParams({
+          startDate,
+          endDate,
+        })
+        .then((resp) => new MedicalRequestsToTgMedicalRequests(resp).mapTo());
+      const employersWithRequests =
+        new TgMedicalRequestsToEmployersWithRequestsMapper(requests).mapTo();
       this.bot.telegram.sendMessage(
         chatId,
         `⌛️Расписание на ${startDate.toLocaleDateString(undefined, {
           dateStyle: 'short',
-        })}\n\n` + fromEmployersRequests(employers),
+        })}\n\n` + fromEmployersRequests(employersWithRequests),
         {
           parse_mode: 'HTML',
         },

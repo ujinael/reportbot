@@ -3,45 +3,60 @@ import { CreateCallTouchRequestDto } from './dto/create-request.dto';
 import { UpdateCallTouchRequestDto } from './dto/update-request.dto';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
-import { catchError, lastValueFrom, map } from 'rxjs';
+import { CallTouchApiRequestRepository } from './repository';
+import { dayjs } from '@/core';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Between, Repository } from 'typeorm';
 import { CallTouchRequest } from './entities/request.entity';
-import { ICallTouchRequestDto } from './dto/calltouch-request.dto';
-
 @Injectable()
 export class RequestsService {
   constructor(
     private readonly httpModule: HttpService,
     private readonly configService: ConfigService,
+    private readonly callTouchApiRepository: CallTouchApiRequestRepository,
+    @InjectRepository(CallTouchRequest)
+    private readonly callTouchTypeormRepository: Repository<CallTouchRequest>,
   ) {}
   create(createCallDto: CreateCallTouchRequestDto) {
     return 'This action adds a new call';
   }
 
   async findAll(dateFrom = '16/09/2023', dateTo = '16/09/2023') {
-    const dateFromArray = dateFrom.split('/');
-    const dateToArray = dateTo.split('/');
+    const $dateFrom = dayjs(dateFrom, 'DD/MM/YYYY');
+    const $dateTo = dayjs(dateTo, 'DD/MM/YYYY');
 
-    const token = this.configService.get('calltouch.token');
-    const $responseData = this.httpModule
-      .get<ICallTouchRequestDto[]>(`calls-service/RestAPI/requests`, {
-        params: {
-          dateFrom: `${dateFromArray.at(1)}/${dateFromArray.at(
-            0,
-          )}/${dateFromArray.at(2)}`,
-          dateTo: `${dateToArray.at(1)}/${dateToArray.at(0)}/${dateToArray.at(
-            2,
-          )}`,
-          clientApiId: token,
+    const isDateQueryBeforeCurrentDate = dayjs().startOf('d').isAfter($dateTo);
+    if (isDateQueryBeforeCurrentDate) {
+      const requests = await this.callTouchTypeormRepository.find({
+        relations: {
+          client: { phones: true },
+          session: true,
         },
-      })
-      .pipe(
-        catchError((err, resp) => {
-          console.log(err);
-          return resp;
-        }),
-      )
-      .pipe(map((resp) => resp.data));
-    return await lastValueFrom($responseData);
+        where: {
+          date: Between(
+            $dateFrom.startOf('d').toDate(),
+            $dateTo.endOf('d').toDate(),
+          ),
+        },
+      });
+      if (requests.length) return requests;
+      else {
+        const responseData = await this.callTouchApiRepository.findAll(
+          $dateFrom.toDate(),
+          $dateTo.toDate(),
+        );
+        console.log('NOT_CACHED');
+
+        this.callTouchTypeormRepository.save(responseData);
+        return responseData;
+      }
+    } else {
+      const responseData = await this.callTouchApiRepository.findAll(
+        $dateFrom.toDate(),
+        $dateTo.toDate(),
+      );
+      return responseData;
+    }
   }
 
   findOne(id: number) {

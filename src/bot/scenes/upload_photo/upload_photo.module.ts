@@ -5,7 +5,7 @@ import { TGUploadPhotoScene } from './upload_photo.scene';
 import { HttpModule } from '@nestjs/axios';
 
 @Module({
-  imports: [MedicalRequestModule, UserModule,HttpModule.register({})],
+  imports: [MedicalRequestModule, UserModule, HttpModule.register({})],
   providers: [TGUploadPhotoScene],
   exports: [TGUploadPhotoScene],
 })

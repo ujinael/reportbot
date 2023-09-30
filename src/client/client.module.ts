@@ -3,14 +3,18 @@ import { ClientService } from './client.service';
 import { ClientController } from './client.controller';
 import { HttpModule } from '@nestjs/axios';
 import { HttpOneSConfigService } from 'src/http';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Client } from './entities';
 
 @Module({
-  imports: [HttpModule.registerAsync({
-    useClass: HttpOneSConfigService
-  })],
+  imports: [
+    HttpModule.registerAsync({
+      useClass: HttpOneSConfigService,
+    }),
+    TypeOrmModule.forFeature([Client]),
+  ],
   controllers: [ClientController],
   providers: [ClientService],
-  exports: [ClientService]
-
+  exports: [ClientService],
 })
-export class ClientModule { }
+export class ClientModule {}

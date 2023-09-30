@@ -16,6 +16,6 @@ export class MedicalRequest {
   @Type(() => Employer)
   employer: Employer;
   @Type(() => NomenclatureItem)
-  nomenclature: NomenclatureItem[];
+  nomenclatureItems: NomenclatureItem[];
   note?: string;
 }

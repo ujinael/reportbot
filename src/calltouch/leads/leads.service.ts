@@ -5,8 +5,10 @@ import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
 import { CallsService } from '../calls/calls.service';
 import { RequestsService } from '../requests/requests.service';
-import { callToLeadMapper } from './mappers/call_to_lead.mapper';
-import { requestToLeadMapper } from './mappers/request_to_lead.mapper';
+import {
+  CallTouchPhoneCallToLeadMap,
+  CallTouchRequestToLeadMap,
+} from './mappers';
 import { CallTouchLeadDto } from './dto/calltouch-lead.dto';
 
 @Injectable()
@@ -16,9 +18,9 @@ export class LeadsService {
     private readonly configService: ConfigService,
     private readonly callsService: CallsService,
     private readonly requestsService: RequestsService,
-  ) { }
+  ) {}
   create(createLeadDto: CallTouchLeadDto) {
-    Logger.log(createLeadDto)
+    Logger.log(createLeadDto);
     return HttpStatus.OK;
   }
 
@@ -26,8 +28,10 @@ export class LeadsService {
     const calls = await this.callsService.findAll(dateFrom, dateTo);
     const requests = await this.requestsService.findAll(dateFrom, dateTo);
     return [
-      ...calls.map((call) => callToLeadMapper(call)),
-      ...requests.map((request) => requestToLeadMapper(request)),
+      ...calls.map((call) => new CallTouchPhoneCallToLeadMap(call).mapTo()),
+      ...requests.map((request) =>
+        new CallTouchRequestToLeadMap(request).mapTo(),
+      ),
     ];
   }
 

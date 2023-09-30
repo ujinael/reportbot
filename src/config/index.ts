@@ -20,4 +20,11 @@ export default () => ({
     counter: process.env.CALLTOUCH_COUNTER,
     host: process.env.CALLTOUCH_HOST,
   },
+  database: {
+    database: process.env.POSTGRESS_DB ?? '',
+    username: process.env.POSTGRESS_USERNAME ?? 'postgress',
+    password: process.env.POSTGRESS_PASSWORD ?? '',
+    host: process.env.POSTGRESS_HOST ?? 'localhost',
+    port: +process.env.POSTGRESS_PORT ?? 5432,
+  },
 });

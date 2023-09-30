@@ -19,7 +19,7 @@ import { ILead } from './entities/lead.entity';
 
 @Controller('leads')
 export class LeadsController {
-  constructor(private readonly leadsService: LeadsService) { }
+  constructor(private readonly leadsService: LeadsService) {}
   @HttpCode(HttpStatus.OK)
   @Post()
   create(@Body() createLeadDto: CallTouchLeadDto) {
@@ -27,7 +27,9 @@ export class LeadsController {
   }
 
   @Get()
-  findAll(@Query() query: { dateFrom: string; dateTo: string }): Promise<ILead[]> {
+  findAll(
+    @Query() query: { dateFrom: string; dateTo: string },
+  ): Promise<ILead[]> {
     try {
       if (query.dateFrom === undefined && query.dateTo === undefined)
         throw Error('params dateFrom & dateTo required');

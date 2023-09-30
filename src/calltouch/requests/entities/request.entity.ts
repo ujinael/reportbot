@@ -1,65 +1,62 @@
-import { ICallTouchLead } from 'src/calltouch/leads/entities/lead.entity';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { CallTouchRequestClient } from './request_client.entity';
+import { CallTouchRequestSession } from './request_session.entity';
 
-export interface ICallTouchSession {
-  sessionId: number;
-  keywords: string;
-  city: string;
-  ip: string;
-  source: string;
-  medium: string;
-  ref: string;
-  url: string;
-  utmSource: string;
-  utmMedium: string;
-  utmTerm: string;
-  utmContent: string;
-  utmCampaign: string;
-  guaClientId: string;
-  sessionDate: string;
-  attrs: null | Array<any>;
-  attribution: 1;
-  yaClientId: string;
-  additionalTags: Array<string>;
-  ctGlobalId: null | string;
-  browser: string;
-}
-export interface ICallTouchClient {
-  clientId: number;
-  fio: string;
-  phones: [
-    {
-      phoneNumber: string;
-      phoneType: string;
-    },
-  ];
-  contacts: Array<any>;
-}
-
-export class CallTouchRequest implements ICallTouchLead {
-  date: string | number;
-  comments: Array<any>;
-  requestType: null | string;
+@Entity('calltouch_request')
+export class CallTouchRequest {
+  @PrimaryGeneratedColumn('uuid')
+  id: EntityID;
+  @Column()
+  date: Date;
+  @Column({ nullable: true })
+  requestType?: string;
+  @Column()
   dateStr: string;
-  manager: string;
-  session: ICallTouchSession;
+  @Column({ nullable: true })
+  manager?: string;
+  @OneToOne(() => CallTouchRequestSession, (session) => session.request, {
+    cascade: true,
+  })
+  @JoinColumn()
+  session: CallTouchRequestSession;
+  @Column()
   subject: string;
+  @Column()
   uniqTargetRequest: boolean;
-  uniqueRequest: boolean;
-  yandexDirect: null | boolean | string;
-  googleAdWords: null | boolean | string;
+  @Column({ nullable: true })
+  uniqueRequest?: boolean;
+  @Column({ nullable: true })
+  yandexDirect?: string;
+  @Column({ nullable: true })
+  googleAdWords?: string;
+  @Column()
   requestNumber: string;
+  @Column()
   requestId: number;
-  client: ICallTouchClient;
+
+  @OneToOne(() => CallTouchRequestClient, (client) => client.request, {
+    cascade: true,
+  })
+  @JoinColumn()
+  client: CallTouchRequestClient;
+  @Column()
   siteId: number;
-  orders: Array<any>;
+  @Column()
   targetRequest: boolean;
+  @Column()
   status: string;
-  order: null | any;
-  mapVisits: Array<any>;
+  @Column()
   requestUrl: string;
+  @Column({ type: 'bigint' })
   ctClientId: number;
-  dcm: string | null;
-  ctGlobalId: string | null;
-  widgetInfo: string | null;
-  RequestTags: Array<string> | null;
+  @Column({ nullable: true })
+  dcm?: string;
+  @Column({ nullable: true })
+  ctGlobalId?: string;
 }

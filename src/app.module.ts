@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import config from './config';
 import { TgBotModule } from './bot/bot.module';
 import { ScheduleModule } from '@nestjs/schedule';
@@ -12,8 +12,8 @@ import { ClientModule } from './client/client.module';
 import { NomenclatureItemModule } from './nomenclature_item/nomenclature_item.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './user/user.module';
-import { User } from './user/entities/user.entity';
 import { CalltouchModule } from './calltouch/calltouch.module';
+import { typeOrmConfigFactory } from './database_config/type_orm_config';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -23,15 +23,10 @@ import { CalltouchModule } from './calltouch/calltouch.module';
       load: [config],
       isGlobal: true,
     }),
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: process.env.POSTGRESS_HOST ?? 'localhost',
-      port: +process.env.POSTGRESS_PORT ?? 5432,
-      username: process.env.POSTGRESS_USERNAME ?? 'postgress',
-      password: process.env.POSTGRESS_PASSWORD ?? '',
-      database: process.env.POSTGRESS_DB ?? '',
-      entities: [User],
-      synchronize: process.env.NODE_ENV === 'production' ? false : true,
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: typeOrmConfigFactory,
     }),
     ScheduleModule.forRoot(),
     TgBotModule,

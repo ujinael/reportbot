@@ -1,14 +1,19 @@
-import { Expose } from 'class-transformer';
-
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+@Entity('client')
 export class Client {
+  @PrimaryGeneratedColumn('uuid')
   id: string;
-  @Expose({ name: 'first_name' })
-  firstName: string;
-  @Expose({ name: 'last_name' })
-  lastName: string;
+  @Column()
+  name: string;
+  @Column()
+  surname: string;
+  @Column()
   patronimyc: string;
 
-  get fullTitle(){
-    return `${this.lastName} ${this.firstName} ${this.patronimyc}`
+  @Column({ name: 'umc_id' })
+  umcId: string;
+
+  get fullTitle() {
+    return `${this.name} ${this.surname} ${this.patronimyc}`;
   }
 }

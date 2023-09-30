@@ -3,6 +3,7 @@ import { MedicalRequestService } from './medical_request.service';
 import { MedicalRequestController } from './medical_request.controller';
 import { HttpModule } from '@nestjs/axios';
 import { HttpOneSConfigService } from 'src/http';
+import { MedicalRequestUmcApiRepository } from './repository';
 
 @Module({
   imports: [
@@ -12,7 +13,7 @@ import { HttpOneSConfigService } from 'src/http';
   ],
 
   controllers: [MedicalRequestController],
-  providers: [MedicalRequestService],
+  providers: [MedicalRequestUmcApiRepository, MedicalRequestService],
   exports: [MedicalRequestService],
 })
 export class MedicalRequestModule {}

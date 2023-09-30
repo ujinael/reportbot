@@ -1,8 +1,5 @@
 import { ICallTouchLead } from 'src/calltouch/leads/entities/lead.entity';
-import {
-  ICallTouchClient,
-  ICallTouchSession,
-} from '../entities/request.entity';
+import { ICallTouchClientDto, ICallTouchSessionDto } from './index';
 
 export class ICallTouchRequestDto implements ICallTouchLead {
   date: number;
@@ -10,7 +7,7 @@ export class ICallTouchRequestDto implements ICallTouchLead {
   requestType: null | string;
   dateStr: string;
   manager: string;
-  session: ICallTouchSession;
+  session: ICallTouchSessionDto;
   subject: string;
   uniqTargetRequest: boolean;
   uniqueRequest: boolean;
@@ -18,7 +15,7 @@ export class ICallTouchRequestDto implements ICallTouchLead {
   googleAdWords: null | boolean | string;
   requestNumber: string;
   requestId: number;
-  client: ICallTouchClient;
+  client: ICallTouchClientDto;
   siteId: number;
   orders: Array<any>;
   targetRequest: boolean;

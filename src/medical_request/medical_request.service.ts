@@ -1,16 +1,15 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateMedicalRequestDto } from './dto/create-medical_request.dto';
 import { UpdateMedicalRequestDto } from './dto/update-medical_request.dto';
-import { HttpService } from '@nestjs/axios';
 import { RequestFilter } from './entities/filter_params.interface';
 import { MedicalRequest } from './entities/medical_request.entity';
-import { lastValueFrom, map } from 'rxjs';
-import { plainToInstance } from 'class-transformer';
-import { OutputEmployerDto } from 'src/employer/dto/output-employer.dto';
+import { MedicalRequestUmcApiRepository } from './repository/medical_request_umc_api.repository';
 
 @Injectable()
 export class MedicalRequestService {
-  constructor(private readonly httpModule: HttpService) {}
+  constructor(
+    private readonly medicalRequestUmcApiRepository: MedicalRequestUmcApiRepository,
+  ) {}
   create(createMedicalRequestDto: CreateMedicalRequestDto) {
     return 'This action adds a new medicalRequest';
   }
@@ -18,28 +17,14 @@ export class MedicalRequestService {
   findAll() {
     return `This action returns all medicalRequest`;
   }
-  async findByParams(filter: RequestFilter) {
+  async findByParams(filter: RequestFilter): Promise<MedicalRequest[]> {
     try {
-      const startDate = filter.startDate
-        .toISOString()
-        .replace(/\.(.*)/g, '')
-        .trim();
-      const endDate = filter.endDate
-        .toISOString()
-        .replace(/\.(.*)/g, '')
-        .trim();
-
-      const observ = this.httpModule
-        .get<MedicalRequest[]>('/medical_requests/list', {
-          params: {
-            start_date: startDate,
-            end_date: endDate,
-            employer_id: filter.employer_id,
-          },
-        })
-        .pipe(map((resp) => plainToInstance(MedicalRequest, resp.data)));
-
-      return await lastValueFrom(observ);
+      const { employer_id, startDate, endDate } = filter;
+      return this.medicalRequestUmcApiRepository.findAll(
+        startDate,
+        endDate,
+        employer_id,
+      );
     } catch (error) {
       throw new HttpException(
         {
@@ -50,18 +35,6 @@ export class MedicalRequestService {
         HttpStatus.UNPROCESSABLE_ENTITY,
       );
     }
-  }
-  groupByEmployer(requests: MedicalRequest[]) {
-    return requests.reduce<OutputEmployerDto[]>((prev, current) => {
-      const pretender = prev.find((emp) => emp.id === current.employer.id);
-      if (pretender) {
-        pretender.medicalRequests.push(current);
-        return prev;
-      } else {
-        prev.push({ ...current.employer, medicalRequests: [current] });
-        return prev;
-      }
-    }, []);
   }
   findOne(id: number) {
     return `This action returns a #${id} medicalRequest`;
