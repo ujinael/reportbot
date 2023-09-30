@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { RequestsService } from './requests.service';
 import { RequestsController } from './requests.controller';
 import { HttpModule } from '@nestjs/axios';
-import { HttpCallTouchConfigService } from 'src/http';
+import { HttpCallTouchConfigService } from '@/http';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CallTouchRequest } from './entities/request.entity';
 import { CallTouchRequestClient } from './entities/request_client.entity';
@@ -26,4 +26,4 @@ import { CallTouchApiRequestRepository } from './repository';
   providers: [CallTouchApiRequestRepository, RequestsService],
   exports: [RequestsService],
 })
-export class RequestsModule {}
+export class RequestsModule { }

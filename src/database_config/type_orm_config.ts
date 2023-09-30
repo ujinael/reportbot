@@ -4,7 +4,6 @@ import * as path from 'path';
 export const typeOrmConfigFactory = async (
   configService: ConfigService,
 ): Promise<TypeOrmModuleOptions> => {
-  console.log(path.resolve(__dirname, '..', '**/*.entity{.ts, .js}'));
   return {
     type: 'postgres',
     database: configService.get<string>('database.database'),

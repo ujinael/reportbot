@@ -8,7 +8,7 @@ import { dayjs } from '@/core';
 export class CallsService {
   constructor(
     private callTouchApiPhoneCallRepository: CallTouchApiPhoneCallRepository,
-  ) {}
+  ) { }
   create(createCallDto: CreateCallDto) {
     return 'This action adds a new call';
   }

@@ -9,7 +9,7 @@ import { MedicalRequestUmcApiRepository } from './repository/medical_request_umc
 export class MedicalRequestService {
   constructor(
     private readonly medicalRequestUmcApiRepository: MedicalRequestUmcApiRepository,
-  ) {}
+  ) { }
   create(createMedicalRequestDto: CreateMedicalRequestDto) {
     return 'This action adds a new medicalRequest';
   }
@@ -28,7 +28,7 @@ export class MedicalRequestService {
     } catch (error) {
       throw new HttpException(
         {
-          reason: 'findByParams',
+          reason: error.reason ?? 'findByParams',
           status: HttpStatus.UNPROCESSABLE_ENTITY,
           errorText: (<Error>error).message,
         },

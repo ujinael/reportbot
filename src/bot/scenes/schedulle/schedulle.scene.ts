@@ -1,12 +1,12 @@
 import { Action, Ctx, Scene, SceneEnter } from 'nestjs-telegraf';
 import { SceneContext } from 'telegraf/typings/scenes';
-import { restScheduleButtons } from 'src/bot/utils/buttons';
+import { restScheduleButtons } from '@/bot/utils/buttons';
 import { ConfigService } from '@nestjs/config';
-import { MedicalRequestService } from 'src/medical_request/medical_request.service';
-import { fromEmployersRequests } from 'src/bot/utils/templates';
+import { MedicalRequestService } from '@/medical_request/medical_request.service';
+import { fromEmployersRequests } from '@/bot/utils/templates';
 import * as fs from 'fs';
 import { Context } from 'telegraf';
-import { allowedNames } from 'src/utils/files.utils';
+import { allowedNames } from '@/utils/files.utils';
 import {
   MedicalRequestsToTgMedicalRequests,
   TgMedicalRequestsToEmployersWithRequestsMapper,
@@ -16,7 +16,7 @@ export class TGSchedulleScene {
   constructor(
     private readonly configService: ConfigService,
     private readonly medicalRequestService: MedicalRequestService,
-  ) {}
+  ) { }
   @SceneEnter()
   async enter(@Ctx() ctx: SceneContext) {
     ctx.reply('Выберите период', restScheduleButtons());
