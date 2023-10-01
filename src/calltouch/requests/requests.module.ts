@@ -26,4 +26,4 @@ import { CallTouchApiRequestRepository } from './repository';
   providers: [CallTouchApiRequestRepository, RequestsService],
   exports: [RequestsService],
 })
-export class RequestsModule { }
+export class RequestsModule {}
