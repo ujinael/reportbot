@@ -16,7 +16,7 @@ export class TGSchedulleScene {
   constructor(
     private readonly configService: ConfigService,
     private readonly medicalRequestService: MedicalRequestService,
-  ) { }
+  ) {}
   @SceneEnter()
   async enter(@Ctx() ctx: SceneContext) {
     ctx.reply('Выберите период', restScheduleButtons());
