@@ -9,7 +9,7 @@ import { MedicalRequestUmcApiRepository } from './repository/medical_request_umc
 export class MedicalRequestService {
   constructor(
     private readonly medicalRequestUmcApiRepository: MedicalRequestUmcApiRepository,
-  ) { }
+  ) {}
   create(createMedicalRequestDto: CreateMedicalRequestDto) {
     return 'This action adds a new medicalRequest';
   }

@@ -15,4 +15,4 @@ import { MedicalRequestUmcApiRepository } from './repository';
   providers: [MedicalRequestUmcApiRepository, MedicalRequestService],
   exports: [MedicalRequestService],
 })
-export class MedicalRequestModule { }
+export class MedicalRequestModule {}

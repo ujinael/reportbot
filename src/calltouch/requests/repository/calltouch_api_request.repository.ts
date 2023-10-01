@@ -5,11 +5,11 @@ import { catchError, lastValueFrom, map } from 'rxjs';
 import { HttpService } from '@nestjs/axios';
 import { ICallTouchRequestDtoToCallTouchRequestMapper } from '../mappers';
 import { ICallTouchRequestDto } from '../dto';
-import { AbstractRepository, dayjs } from '@/core';
+import { AbstractFindAllRepository, AbstractRepository, dayjs } from '@/core';
 
 @Injectable()
 export class CallTouchApiRequestRepository
-  implements AbstractRepository<CallTouchRequest>
+  implements AbstractFindAllRepository<CallTouchRequest>
 {
   constructor(
     private configService: ConfigService,

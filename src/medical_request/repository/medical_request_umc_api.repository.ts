@@ -1,4 +1,4 @@
-import { AbstractRepository } from '@/core';
+import { AbstractFindAllRepository } from '@/core';
 import { HttpService } from '@nestjs/axios';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { lastValueFrom, map, catchError } from 'rxjs';
@@ -7,9 +7,9 @@ import { MedicalRequest } from '../entities';
 import { UMCMedicalRequestDtoToMedicalRequestMapper } from '../mappers/umc_medical_request_dto_to_medical_request.mapper';
 @Injectable()
 export class MedicalRequestUmcApiRepository
-  implements AbstractRepository<MedicalRequest>
+  implements AbstractFindAllRepository<MedicalRequest>
 {
-  constructor(private httpModule: HttpService) { }
+  constructor(private httpModule: HttpService) {}
   findAll(
     dateFrom: Date,
     dateTo: Date,
@@ -32,10 +32,12 @@ export class MedicalRequestUmcApiRepository
             employer_id: employerId,
           },
         })
-        .pipe(catchError((err, resp) => {
-          console.log(err);
-          return resp
-        }))
+        .pipe(
+          catchError((err, resp) => {
+            console.log(err);
+            return resp;
+          }),
+        )
         .pipe(
           map((resp) =>
             resp.data.map((request) =>
@@ -45,8 +47,7 @@ export class MedicalRequestUmcApiRepository
         );
 
       return lastValueFrom(observ);
-    }
-    catch (error) {
+    } catch (error) {
       throw new HttpException(
         {
           reason: 'MedicalRequestUmcApiRepository.findAll',
