@@ -18,7 +18,7 @@ export class LeadsService {
     private readonly configService: ConfigService,
     private readonly callsService: CallsService,
     private readonly requestsService: RequestsService,
-  ) {}
+  ) { }
   create(createLeadDto: CallTouchLeadDto) {
     Logger.log(createLeadDto);
     return HttpStatus.OK;
