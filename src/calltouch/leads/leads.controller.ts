@@ -12,20 +12,12 @@ import {
   HttpCode,
 } from '@nestjs/common';
 import { LeadsService } from './leads.service';
-import { CreateLeadDto } from './dto/create-lead.dto';
 import { UpdateLeadDto } from './dto/update-lead.dto';
-import { CallTouchLeadDto } from './dto/calltouch-lead.dto';
 import { ILead } from './entities/lead.entity';
 
 @Controller('leads')
 export class LeadsController {
   constructor(private readonly leadsService: LeadsService) {}
-  @HttpCode(HttpStatus.OK)
-  @Post()
-  create(@Body() createLeadDto: CallTouchLeadDto) {
-    return this.leadsService.create(createLeadDto);
-  }
-
   @Get()
   findAll(
     @Query() query: { dateFrom: string; dateTo: string },

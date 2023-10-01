@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { CreateCallTouchRequestDto } from './dto/create-request.dto';
 import { UpdateCallTouchRequestDto } from './dto/update-request.dto';
 import { HttpService } from '@nestjs/axios';
@@ -11,8 +11,6 @@ import { CallTouchRequest } from './entities/request.entity';
 @Injectable()
 export class RequestsService {
   constructor(
-    private readonly httpModule: HttpService,
-    private readonly configService: ConfigService,
     private readonly callTouchApiRepository: CallTouchApiRequestRepository,
     @InjectRepository(CallTouchRequest)
     private readonly callTouchTypeormRepository: Repository<CallTouchRequest>,
@@ -22,40 +20,56 @@ export class RequestsService {
   }
 
   async findAll(dateFrom = '16/09/2023', dateTo = '16/09/2023') {
-    const $dateFrom = dayjs(dateFrom, 'DD/MM/YYYY');
-    const $dateTo = dayjs(dateTo, 'DD/MM/YYYY');
+    try {
+      const $dateFrom = dayjs(dateFrom, 'DD/MM/YYYY');
+      const $dateTo = dayjs(dateTo, 'DD/MM/YYYY');
 
-    const isDateQueryBeforeCurrentDate = dayjs().startOf('d').isAfter($dateTo);
-    if (isDateQueryBeforeCurrentDate) {
-      const requests = await this.callTouchTypeormRepository.find({
-        relations: {
-          client: { phones: true },
-          session: true,
-        },
-        where: {
-          date: Between(
-            $dateFrom.startOf('d').toDate(),
-            $dateTo.endOf('d').toDate(),
-          ),
-        },
-      });
-      if (requests.length) return requests;
-      else {
+      const isDateQueryBeforeCurrentDate = dayjs()
+        .startOf('d')
+        .isAfter($dateTo);
+      if (isDateQueryBeforeCurrentDate) {
+        const requests = await this.callTouchTypeormRepository.find({
+          relations: {
+            client: { phones: true },
+            session: true,
+          },
+          where: {
+            date: Between(
+              $dateFrom.startOf('d').toDate(),
+              $dateTo.endOf('d').toDate(),
+            ),
+          },
+        });
+        Logger.log('FROM_CASH', 'RequestsService.findAll');
+        if (requests.length) return requests;
+        else {
+          const responseData = await this.callTouchApiRepository.findAll(
+            $dateFrom.toDate(),
+            $dateTo.toDate(),
+          );
+          Logger.log('NOT_CASHED', 'RequestsService.findAll');
+          await this.callTouchTypeormRepository.save(responseData);
+          Logger.log('SAVED_TO_CASH', 'RequestsService.findAll');
+
+          return responseData;
+        }
+      } else {
         const responseData = await this.callTouchApiRepository.findAll(
           $dateFrom.toDate(),
           $dateTo.toDate(),
         );
-        console.log('NOT_CACHED');
-
-        this.callTouchTypeormRepository.save(responseData);
         return responseData;
       }
-    } else {
-      const responseData = await this.callTouchApiRepository.findAll(
-        $dateFrom.toDate(),
-        $dateTo.toDate(),
+    } catch (error) {
+      Logger.error((<Error>error).message, 'RequestsService.findAll');
+      throw new HttpException(
+        {
+          reason: 'RequestsService.findAll',
+          status: HttpStatus.UNPROCESSABLE_ENTITY,
+          errorText: (<Error>error).message,
+        },
+        HttpStatus.UNPROCESSABLE_ENTITY,
       );
-      return responseData;
     }
   }
 

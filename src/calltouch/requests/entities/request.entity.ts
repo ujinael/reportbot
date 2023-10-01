@@ -23,7 +23,7 @@ export class CallTouchRequest {
   @OneToOne(() => CallTouchRequestSession, (session) => session.request, {
     cascade: true,
   })
-  @JoinColumn()
+  @JoinColumn({ name: 'session_id' })
   session: CallTouchRequestSession;
   @Column()
   subject: string;
@@ -43,7 +43,7 @@ export class CallTouchRequest {
   @OneToOne(() => CallTouchRequestClient, (client) => client.request, {
     cascade: true,
   })
-  @JoinColumn()
+  @JoinColumn({ name: 'client_id' })
   client: CallTouchRequestClient;
   @Column()
   siteId: number;

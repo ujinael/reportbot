@@ -1,19 +1,24 @@
 import { CallTouchRequestSession } from 'src/calltouch/requests/entities/request_session.entity';
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
-@Entity('phone_call')
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+@Entity('calltouch_phone_call')
 export class CallTouchPhoneCall {
   @PrimaryGeneratedColumn('uuid')
   id: EntityID;
-  @OneToOne(() => CallTouchRequestSession, (session) => session.phoneCall)
+  @OneToOne(() => CallTouchRequestSession, (session) => session.phoneCall, {
+    cascade: true,
+  })
+  @JoinColumn({ name: 'session_id' })
   session: CallTouchRequestSession;
   @Column()
   callId: string;
   @Column()
   callphase: string;
-  @Column()
-  attribution: number;
-  @Column({ type: 'simple-array' })
-  callTags: Array<string>;
   @Column()
   date: Date;
   @Column()
@@ -24,10 +29,10 @@ export class CallTouchPhoneCall {
   redirectNumber: string;
   @Column()
   phoneNumber: string;
+  @Column({ nullable: true })
+  manager?: string;
   @Column()
-  manager: string;
-  @Column()
-  successful: string;
+  successful: boolean;
   @Column()
   uniqueCall: boolean;
   @Column()
@@ -37,8 +42,8 @@ export class CallTouchPhoneCall {
   @Column()
   callbackCall: boolean;
 
-  @Column()
-  callUrl: string;
+  @Column({ nullable: true })
+  callUrl?: string;
 
   @Column()
   hostname: string;
@@ -57,8 +62,6 @@ export class CallTouchPhoneCall {
   waitingConnect: number;
   @Column()
   callReferenceId: string;
-  @Column({ type: 'simple-array', nullable: true })
-  mapVisits?: Array<string>;
 
   @Column({ nullable: true })
   callClientUniqueId?: number;
@@ -72,21 +75,17 @@ export class CallTouchPhoneCall {
   @Column()
   sessionDate: string;
   @Column()
-  yandexDirect: boolean;
-  @Column()
-  googleAdWords: boolean;
-  @Column()
   siteId: number;
   @Column()
   siteName: string;
-  @Column()
-  callbackInfo: string;
-  @Column()
+  @Column({ nullable: true })
+  callbackInfo?: string;
+  @Column({ type: 'bigint' })
   ctClientId: number;
-  @Column()
+  @Column({ nullable: true })
   dcm: string;
-  @Column()
-  phonesInText: string;
+  @Column({ nullable: true })
+  phonesInText?: string;
   @Column({ nullable: true })
   ctGlobalId?: string;
   @Column({ nullable: true })

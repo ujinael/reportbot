@@ -9,11 +9,9 @@ export class ICallTouchPhoneCallDtoToCallTouchPhoneCallMapper
   constructor(private dto: ICalltouchPhoneCallDto) {}
   mapTo(): CallTouchPhoneCall {
     const phoneCall = new CallTouchPhoneCall();
-    phoneCall.attribution = this.dto.attribution;
     phoneCall.callClientUniqueId = this.dto.callClientUniqueId;
     phoneCall.callId = this.dto.callId;
     phoneCall.callReferenceId = this.dto.callReferenceId;
-    phoneCall.callTags = this.dto.callTags;
     phoneCall.callUrl = this.dto.callUrl;
     phoneCall.callbackCall = this.dto.callbackCall;
     phoneCall.callbackInfo = this.dto.callbackInfo;
@@ -27,10 +25,8 @@ export class ICallTouchPhoneCallDtoToCallTouchPhoneCallMapper
     phoneCall.dcm = this.dto.dcm;
     phoneCall.device = this.dto.device;
     phoneCall.duration = this.dto.duration;
-    phoneCall.googleAdWords = this.dto.googleAdWords;
     phoneCall.hostname = this.dto.hostname;
     phoneCall.manager = this.dto.manager;
-    phoneCall.mapVisits = this.dto.mapVisits;
     phoneCall.os = this.dto.os;
     phoneCall.phoneNumber = this.dto.phoneNumber;
     phoneCall.phonesInText = this.dto.phonesInText;
@@ -52,7 +48,6 @@ export class ICallTouchPhoneCallDtoToCallTouchPhoneCallMapper
     phoneCall.uniqueCall = this.dto.uniqueCall;
     phoneCall.userAgent = this.dto.userAgent;
     phoneCall.waitingConnect = this.dto.waitingConnect;
-    phoneCall.yandexDirect;
     return phoneCall;
   }
 }
