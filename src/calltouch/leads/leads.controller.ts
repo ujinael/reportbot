@@ -1,7 +1,6 @@
 import {
   Controller,
   Get,
-  Post,
   Body,
   Patch,
   Param,
@@ -9,7 +8,6 @@ import {
   Query,
   HttpException,
   HttpStatus,
-  HttpCode,
 } from '@nestjs/common';
 import { LeadsService } from './leads.service';
 import { UpdateLeadDto } from './dto/update-lead.dto';

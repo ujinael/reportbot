@@ -1,1 +1,3 @@
-export class Webhook {}
+export class Webhook {
+  id: EntityID;
+}

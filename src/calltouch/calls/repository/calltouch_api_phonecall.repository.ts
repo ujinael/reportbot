@@ -1,4 +1,4 @@
-import { AbstractRepository, dayjs } from '@/core';
+import { AbstractFindAllRepository, dayjs } from '@/core';
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -9,7 +9,7 @@ import { ICallTouchPhoneCallDtoToCallTouchPhoneCallMapper } from '../mappers/ICa
 
 @Injectable()
 export class CallTouchApiPhoneCallRepository
-  implements AbstractRepository<CallTouchPhoneCall>
+  implements AbstractFindAllRepository<CallTouchPhoneCall>
 {
   constructor(
     private configService: ConfigService,
