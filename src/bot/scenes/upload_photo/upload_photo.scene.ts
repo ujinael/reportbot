@@ -6,6 +6,7 @@ import { ConfigService } from '@nestjs/config';
 import * as fs from 'fs';
 import { lastValueFrom } from 'rxjs';
 import { HttpService } from '@nestjs/axios';
+import { Logger } from '@nestjs/common';
 @Scene('uploadPhotoScene')
 export class TGUploadPhotoScene {
   constructor(
@@ -24,8 +25,8 @@ export class TGUploadPhotoScene {
         ctx.scene.state['employerId'] = currentUser.employerId;
       }
       ctx.sendMessage('Загрузите фото');
-    } catch (er) {
-      console.log(er);
+    } catch (error) {
+      Logger.error(error.message, 'TGUploadPhotoScene.enter');
     }
   }
   @On('photo')

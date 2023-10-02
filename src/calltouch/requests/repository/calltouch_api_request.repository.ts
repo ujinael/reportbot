@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { CallTouchRequest } from '../entities/request.entity';
 import { ConfigService } from '@nestjs/config';
 import { catchError, lastValueFrom, map } from 'rxjs';
@@ -28,8 +28,8 @@ export class CallTouchApiRequestRepository
         },
       })
       .pipe(
-        catchError((err, resp) => {
-          console.log(err);
+        catchError((error, resp) => {
+          Logger.error(error.message, 'CallTouchApiRequestRepository.findAll');
           return resp;
         }),
       )

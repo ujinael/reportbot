@@ -5,6 +5,7 @@ import { ConfigService } from '@nestjs/config';
 import { UserService } from 'src/user/user.service';
 import { registrationButtons } from './utils/buttons';
 import { UserRole } from 'src/user/entities/user.entity';
+import { Logger } from '@nestjs/common';
 @Update()
 export class TgBotUpdate {
   constructor(
@@ -68,7 +69,7 @@ export class TgBotUpdate {
         `Вы успешно зарегистрировались.\nПосле назначения вам роли администратором, вам станет доступен функционал бота`,
       );
     } catch (er) {
-      console.log(er);
+      Logger.error(er.message, 'TgBotUpdate.onScheduleToday');
     }
   }
 }

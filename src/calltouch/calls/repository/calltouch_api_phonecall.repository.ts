@@ -1,6 +1,6 @@
 import { AbstractFindAllRepository, dayjs } from '@/core';
 import { HttpService } from '@nestjs/axios';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { catchError, lastValueFrom, map } from 'rxjs';
 import { ICalltouchPhoneCallDto } from '../dto/calltouch-phonecall.dto';
@@ -32,8 +32,11 @@ export class CallTouchApiPhoneCallRepository
         },
       )
       .pipe(
-        catchError((err, resp) => {
-          console.log(err);
+        catchError((error, resp) => {
+          Logger.error(
+            error.message,
+            'CallTouchApiPhoneCallRepository.findAll',
+          );
           return resp;
         }),
       )

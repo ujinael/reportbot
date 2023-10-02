@@ -1,6 +1,6 @@
 import { AbstractFindAllRepository } from '@/core';
 import { HttpService } from '@nestjs/axios';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { lastValueFrom, map, catchError } from 'rxjs';
 import { UMCMedicalRequestDto } from '../dto';
 import { MedicalRequest } from '../entities';
@@ -33,8 +33,11 @@ export class MedicalRequestUmcApiRepository
           },
         })
         .pipe(
-          catchError((err, resp) => {
-            console.log(err);
+          catchError((error, resp) => {
+            Logger.error(
+              error.message,
+              'MedicalRequestUmcApiRepository.findAll',
+            );
             return resp;
           }),
         )
@@ -48,6 +51,7 @@ export class MedicalRequestUmcApiRepository
 
       return lastValueFrom(observ);
     } catch (error) {
+      Logger.error(error.message, 'MedicalRequestUmcApiRepository.findAll');
       throw new HttpException(
         {
           reason: 'MedicalRequestUmcApiRepository.findAll',
