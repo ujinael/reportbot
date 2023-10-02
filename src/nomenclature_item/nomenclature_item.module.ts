@@ -4,6 +4,6 @@ import { NomenclatureItemController } from './nomenclature_item.controller';
 
 @Module({
   controllers: [NomenclatureItemController],
-  providers: [NomenclatureItemService]
+  providers: [NomenclatureItemService],
 })
 export class NomenclatureItemModule {}

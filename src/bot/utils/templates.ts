@@ -19,7 +19,7 @@ export const fromRequest = (request: TgMedicalRequestDto) => {
     timeStyle: 'short',
   })}-${request.expirationDate.toLocaleTimeString(undefined, {
     timeStyle: 'short',
-  })}: ${request.client.name} ${request.client.surname.at(
+  })}: ${request.client.surname} ${request.client.name.at(
     0,
   )}${request.client.patronimyc.at(0)}${fromNomenclature(
     request.nomenclatureItems,

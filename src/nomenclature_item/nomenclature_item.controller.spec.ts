@@ -11,7 +11,9 @@ describe('NomenclatureItemController', () => {
       providers: [NomenclatureItemService],
     }).compile();
 
-    controller = module.get<NomenclatureItemController>(NomenclatureItemController);
+    controller = module.get<NomenclatureItemController>(
+      NomenclatureItemController,
+    );
   });
 
   it('should be defined', () => {

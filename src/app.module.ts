@@ -17,8 +17,9 @@ import { typeOrmConfigFactory } from './database_config/type_orm_config';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: `${process.env.NODE_ENV === 'production' ? '.production' : '.development'
-        }.env`,
+      envFilePath: `${
+        process.env.NODE_ENV === 'production' ? '.production' : '.development'
+      }.env`,
       load: [config],
       isGlobal: true,
     }),
@@ -40,4 +41,4 @@ import { typeOrmConfigFactory } from './database_config/type_orm_config';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule { }
+export class AppModule {}

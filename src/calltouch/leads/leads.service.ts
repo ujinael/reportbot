@@ -16,7 +16,7 @@ export class LeadsService {
     private readonly configService: ConfigService,
     private readonly callsService: CallsService,
     private readonly requestsService: RequestsService,
-  ) { }
+  ) {}
   async findAll(dateFrom: string, dateTo: string) {
     const calls = await this.callsService.findAll(dateFrom, dateTo);
     const requests = await this.requestsService.findAll(dateFrom, dateTo);

@@ -1,5 +1,14 @@
 import { UserService } from './../../../user/user.service';
-import { Action, Ctx, Message, On, Scene, SceneEnter, TextLink, Url } from 'nestjs-telegraf';
+import {
+  Action,
+  Ctx,
+  Message,
+  On,
+  Scene,
+  SceneEnter,
+  TextLink,
+  Url,
+} from 'nestjs-telegraf';
 import { SceneContext } from 'telegraf/typings/scenes';
 import { doctorRequestButtons, doctorSceneButtons } from './doctor.buttons';
 import { MedicalRequestService } from 'src/medical_request/medical_request.service';
@@ -29,10 +38,12 @@ export class TGDoctorScene {
     }
   }
   @Action('my_request_action')
-  async onMyRequests(@Ctx() ctx: SceneContext,@Message() msg: Record<string | symbol, any>) {
+  async onMyRequests(
+    @Ctx() ctx: SceneContext,
+    @Message() msg: Record<string | symbol, any>,
+  ) {
     try {
-      if(msg)
-      await ctx.deleteMessage(msg.id);
+      if (msg) await ctx.deleteMessage(msg.id);
       ctx.reply('Выберите период', doctorRequestButtons());
     } catch (er) {
       console.log(er);
@@ -42,17 +53,19 @@ export class TGDoctorScene {
   async onTaskAction(@Ctx() ctx: SceneContext) {
     try {
       //@ts-ignore
-const clientId = ctx.match[1];
-      ctx.scene.enter('uploadPhotoScene',{clientId})
+      const clientId = ctx.match[1];
+      ctx.scene.enter('uploadPhotoScene', { clientId });
     } catch (er) {
       console.log(er);
     }
   }
   @Action('schedule_today')
-  async onScheduleToday(@Ctx() ctx: SceneContext, @Message() msg:Record<string,any>) {
+  async onScheduleToday(
+    @Ctx() ctx: SceneContext,
+    @Message() msg: Record<string, any>,
+  ) {
     try {
-      if(msg)
-      await ctx.deleteMessage(msg.id);
+      if (msg) await ctx.deleteMessage(msg.id);
       const startDate = new Date();
       startDate.setUTCHours(1, 0, 0, 0);
       const endDate = new Date(startDate.getTime());
@@ -105,8 +118,8 @@ const clientId = ctx.match[1];
   @Action('patient_card_action')
   async onPatientCard(@Ctx() ctx: SceneContext) {
     try {
-      const employerId = ctx.scene.state['employerId']
-      await ctx.scene.enter('clientCardScene',{employerId})
+      const employerId = ctx.scene.state['employerId'];
+      await ctx.scene.enter('clientCardScene', { employerId });
     } catch (er) {
       console.log(er);
     }

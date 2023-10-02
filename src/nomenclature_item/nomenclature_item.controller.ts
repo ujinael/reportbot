@@ -1,11 +1,21 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { NomenclatureItemService } from './nomenclature_item.service';
 import { CreateNomenclatureItemDto } from './dto/create-nomenclature_item.dto';
 import { UpdateNomenclatureItemDto } from './dto/update-nomenclature_item.dto';
 
 @Controller('nomenclature-item')
 export class NomenclatureItemController {
-  constructor(private readonly nomenclatureItemService: NomenclatureItemService) {}
+  constructor(
+    private readonly nomenclatureItemService: NomenclatureItemService,
+  ) {}
 
   @Post()
   create(@Body() createNomenclatureItemDto: CreateNomenclatureItemDto) {
@@ -23,7 +33,10 @@ export class NomenclatureItemController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateNomenclatureItemDto: UpdateNomenclatureItemDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateNomenclatureItemDto: UpdateNomenclatureItemDto,
+  ) {
     return this.nomenclatureItemService.update(+id, updateNomenclatureItemDto);
   }
 

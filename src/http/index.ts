@@ -4,7 +4,7 @@ import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class HttpOneSConfigService implements HttpModuleOptionsFactory {
-  constructor(private readonly configService: ConfigService) { }
+  constructor(private readonly configService: ConfigService) {}
 
   createHttpOptions(): HttpModuleOptions {
     const baseURL = this.configService.get<string>('api.host');
@@ -21,10 +21,9 @@ export class HttpOneSConfigService implements HttpModuleOptionsFactory {
 }
 @Injectable()
 export class HttpCallTouchConfigService implements HttpModuleOptionsFactory {
-  constructor(private readonly configService: ConfigService) { }
+  constructor(private readonly configService: ConfigService) {}
 
   createHttpOptions(): HttpModuleOptions {
-
     const baseURL = this.configService.get<string>('calltouch.host');
     return {
       baseURL,

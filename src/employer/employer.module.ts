@@ -4,6 +4,6 @@ import { EmployerController } from './employer.controller';
 
 @Module({
   controllers: [EmployerController],
-  providers: [EmployerService]
+  providers: [EmployerService],
 })
 export class EmployerModule {}
