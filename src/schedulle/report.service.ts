@@ -43,7 +43,7 @@ export class DayReportService {
         });
       });
     } catch (er) {
-      console.log(er);
+      Logger.error(er.message, 'DayReportService.handleCron');
     }
   }
 
@@ -73,7 +73,7 @@ export class DayReportService {
         },
       );
     } catch (er) {
-      console.log(er);
+      Logger.error(er.message, 'DayReportService.scheduleCron');
     }
   }
 
@@ -103,7 +103,7 @@ export class DayReportService {
         },
       );
     } catch (er) {
-      console.log(er);
+      Logger.error(er.message, 'DayReportService.handleTest');
     }
   }
 

@@ -1,21 +1,11 @@
 import { UserService } from './../../../user/user.service';
-import {
-  Action,
-  Ctx,
-  Message,
-  On,
-  Scene,
-  SceneEnter,
-  TextLink,
-  Url,
-} from 'nestjs-telegraf';
+import { Action, Ctx, Message, Scene, SceneEnter } from 'nestjs-telegraf';
 import { SceneContext } from 'telegraf/typings/scenes';
 import { doctorRequestButtons, doctorSceneButtons } from './doctor.buttons';
 import { MedicalRequestService } from 'src/medical_request/medical_request.service';
 import { ConfigService } from '@nestjs/config';
 import { fromRequest } from 'src/bot/utils/templates';
-import { Context, Markup } from 'telegraf';
-import { ClientService } from 'src/client/client.service';
+import { Logger } from '@nestjs/common';
 @Scene('doctorScene')
 export class TGDoctorScene {
   constructor(
@@ -34,7 +24,7 @@ export class TGDoctorScene {
         ctx.reply('Выберите действие', doctorSceneButtons());
       }
     } catch (er) {
-      console.log(er);
+      Logger.error(er.message, 'TGDoctorScene.enter');
     }
   }
   @Action('my_request_action')
@@ -46,17 +36,17 @@ export class TGDoctorScene {
       if (msg) await ctx.deleteMessage(msg.id);
       ctx.reply('Выберите период', doctorRequestButtons());
     } catch (er) {
-      console.log(er);
+      Logger.error(er.message, 'TGDoctorScene.onMyRequests');
     }
   }
   @Action([/client-(.*)/])
   async onTaskAction(@Ctx() ctx: SceneContext) {
     try {
-      //@ts-ignore
+      // @ts-ignore
       const clientId = ctx.match[1];
       ctx.scene.enter('uploadPhotoScene', { clientId });
     } catch (er) {
-      console.log(er);
+      Logger.error(er.message, 'TGDoctorScene.onTaskAction');
     }
   }
   @Action('schedule_today')
@@ -85,7 +75,7 @@ export class TGDoctorScene {
         },
       );
     } catch (er) {
-      console.log(er);
+      Logger.error(er.message, 'TGDoctorScene.onScheduleToday');
     }
   }
   @Action('schedule_tomorrow')
@@ -111,7 +101,7 @@ export class TGDoctorScene {
         },
       );
     } catch (er) {
-      console.log(er);
+      Logger.error(er.message, 'TGDoctorScene.onScheduleTomorrow');
     }
   }
 
@@ -121,7 +111,7 @@ export class TGDoctorScene {
       const employerId = ctx.scene.state['employerId'];
       await ctx.scene.enter('clientCardScene', { employerId });
     } catch (er) {
-      console.log(er);
+      Logger.error(er.message, 'TGDoctorScene.onPatientCard');
     }
   }
 }

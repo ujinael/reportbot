@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { CreateMedicalRequestDto } from './dto/create-medical_request.dto';
 import { UpdateMedicalRequestDto } from './dto/update-medical_request.dto';
 import { RequestFilter } from './entities/filter_params.interface';
@@ -26,6 +26,10 @@ export class MedicalRequestService {
         employer_id,
       );
     } catch (error) {
+      Logger.error(
+        (<Error>error).message,
+        'MedicalRequestService.findByParams',
+      );
       throw new HttpException(
         {
           reason: error.reason ?? 'findByParams',

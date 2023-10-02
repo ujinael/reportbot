@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Repository } from 'typeorm';
@@ -19,6 +19,8 @@ export class UserService {
     try {
       return await this.usersRepository.find();
     } catch (error) {
+      Logger.error(error.message, 'DayReportService.findAll');
+
       throw new HttpException(
         {
           reason: '',
@@ -34,6 +36,7 @@ export class UserService {
     try {
       return await this.usersRepository.findOneBy({ id });
     } catch (error) {
+      Logger.error(error.message, 'DayReportService.findOne');
       throw new HttpException(
         {
           reason: '',
@@ -48,6 +51,7 @@ export class UserService {
     try {
       return await this.usersRepository.findOneBy({ telegramId });
     } catch (error) {
+      Logger.error(error.message, 'DayReportService.findOneTelegramId');
       throw new HttpException(
         {
           reason: '',

@@ -7,10 +7,12 @@ import { fromEmployersRequests } from '@/bot/utils/templates';
 import * as fs from 'fs';
 import { Context } from 'telegraf';
 import { allowedNames } from '@/utils/files.utils';
+import { dayjs } from '@/core';
 import {
   MedicalRequestsToTgMedicalRequests,
   TgMedicalRequestsToEmployersWithRequestsMapper,
 } from '@/bot/mappers';
+import { Logger } from '@nestjs/common';
 @Scene('schedulleScene')
 export class TGSchedulleScene {
   constructor(
@@ -24,57 +26,51 @@ export class TGSchedulleScene {
   @Action('rest_schedule_today')
   async onRestScheduleToday(@Ctx() ctx: SceneContext) {
     try {
-      const startDate = new Date();
-      startDate.setUTCHours(1, 0, 0, 0);
-      const endDate = new Date(startDate.getTime());
-      endDate.setUTCHours(21, 0, 59, 0);
+      const startDate = dayjs().startOf('d');
+      const endDate = dayjs().endOf('d');
 
       const requests = await this.medicalRequestService
         .findByParams({
-          startDate,
-          endDate,
+          startDate: startDate.toDate(),
+          endDate: endDate.toDate(),
         })
         .then((resp) => new MedicalRequestsToTgMedicalRequests(resp).mapTo());
 
       const employersWithRequests =
         new TgMedicalRequestsToEmployersWithRequestsMapper(requests).mapTo();
       ctx.sendMessage(
-        `⌛️Расписание на ${startDate.toLocaleDateString(undefined, {
-          dateStyle: 'short',
-        })}\n\n` + fromEmployersRequests(employersWithRequests),
+        `⌛️Расписание на ${startDate.format('DD.MM.YYYY')}\n\n` +
+          fromEmployersRequests(employersWithRequests),
         {
           parse_mode: 'HTML',
         },
       );
     } catch (er) {
-      console.log(er);
+      Logger.error(er.message, 'TGSchedulleScene.onRestScheduleToday');
     }
   }
   @Action('rest_schedule_tomorrow')
   async onRestScheduleTomorrow(@Ctx() ctx: SceneContext) {
     try {
-      const startDate = new Date(Date.now() + 864e5);
-      startDate.setUTCHours(1, 0, 0, 0);
-      const endDate = new Date(startDate.getTime());
-      endDate.setUTCHours(21, 0, 59, 0);
+      const startDate = dayjs().add(1, 'd').startOf('d');
+      const endDate = dayjs().add(1, 'd').endOf('d');
       const requests = await this.medicalRequestService
         .findByParams({
-          startDate,
-          endDate,
+          startDate: startDate.toDate(),
+          endDate: endDate.toDate(),
         })
         .then((resp) => new MedicalRequestsToTgMedicalRequests(resp).mapTo());
       const employersWithRequests =
         new TgMedicalRequestsToEmployersWithRequestsMapper(requests).mapTo();
       ctx.sendMessage(
-        `⌛️Расписание на ${startDate.toLocaleDateString(undefined, {
-          dateStyle: 'short',
-        })}\n\n` + fromEmployersRequests(employersWithRequests),
+        `⌛️Расписание на ${startDate.format('DD.MM.YYYY')}\n\n` +
+          fromEmployersRequests(employersWithRequests),
         {
           parse_mode: 'HTML',
         },
       );
     } catch (er) {
-      console.log(er);
+      Logger.error(er.message, 'TGSchedulleScene.onRestScheduleTomorrow');
     }
   }
   @Action('schedule_today')
@@ -95,7 +91,7 @@ export class TGSchedulleScene {
         });
       });
     } catch (er) {
-      console.log(er);
+      Logger.error(er.message, 'TGSchedulleScene.onScheduleToday');
     }
   }
 
@@ -117,7 +113,7 @@ export class TGSchedulleScene {
         });
       });
     } catch (er) {
-      console.log(er);
+      Logger.error(er.message, 'TGSchedulleScene.onScheduleTomorrow');
     }
   }
   sendFile(dirPath: string, fileName: string, ctx: Context) {

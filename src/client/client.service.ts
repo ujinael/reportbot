@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { CreateClientDto } from './dto/create-client.dto';
 import { UpdateClientDto } from './dto/update-client.dto';
 import { HttpService } from '@nestjs/axios';
@@ -30,6 +30,8 @@ export class ClientService {
       if (!pretender) throw Error('Client not found');
       return await plainToInstance(Client, pretender);
     } catch (error) {
+      Logger.error(error.message, 'ClientService.findOneByTitle');
+
       throw new HttpException(
         {
           errorText: (<Error>error).message,
