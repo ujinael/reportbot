@@ -35,6 +35,7 @@ export class TGSchedulleScene {
           endDate: endDate.toDate(),
         })
         .then((resp) => new MedicalRequestsToTgMedicalRequests(resp).mapTo());
+      console.log(requests);
 
       const employersWithRequests =
         new TgMedicalRequestsToEmployersWithRequestsMapper(requests).mapTo();

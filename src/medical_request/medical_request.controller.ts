@@ -6,11 +6,15 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
+  HttpException,
+  HttpStatus,
+  Logger,
 } from '@nestjs/common';
 import { MedicalRequestService } from './medical_request.service';
 import { CreateMedicalRequestDto } from './dto/create-medical_request.dto';
 import { UpdateMedicalRequestDto } from './dto/update-medical_request.dto';
-
+import { dayjs } from '@/core';
 @Controller('medical-request')
 export class MedicalRequestController {
   constructor(private readonly medicalRequestService: MedicalRequestService) {}
@@ -21,8 +25,21 @@ export class MedicalRequestController {
   }
 
   @Get()
-  findAll() {
-    return this.medicalRequestService.findAll();
+  findAll(@Query() query: { dateFrom: string; dateTo: string }) {
+    try {
+      if (!query.dateFrom || !query.dateTo)
+        throw Error('params dateFrom & dateTo are required');
+      return this.medicalRequestService.findByParams({
+        startDate: dayjs(query.dateFrom).toDate(),
+        endDate: dayjs(query.dateTo).toDate(),
+      });
+    } catch (error) {
+      Logger.log(error.message, 'MedicalRequestController.findAll');
+      throw new HttpException(
+        'params dateFrom & dateTo are required',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 
   @Get(':id')
