@@ -8,6 +8,7 @@ export class UMCEmployerDtoToEmployerMapper
   constructor(private dto: UMCEmployerDto) {}
   mapTo(): Employer {
     const employer = new Employer();
+    employer.id = this.dto.id;
     employer.firstName = this.dto.first_name;
     employer.lastName = this.dto.last_name;
     employer.patronimyc = this.dto.patronimyc;

@@ -35,12 +35,8 @@ export class TGSchedulleScene {
           endDate: endDate.toDate(),
         })
         .then((resp) => new MedicalRequestsToTgMedicalRequests(resp).mapTo());
-      console.log(requests);
-
       const employersWithRequests =
         new TgMedicalRequestsToEmployersWithRequestsMapper(requests).mapTo();
-      console.log(employersWithRequests);
-
       ctx.sendMessage(
         `⌛️Расписание на ${startDate.format('DD.MM.YYYY')}\n\n` +
           fromEmployersRequests(employersWithRequests),
