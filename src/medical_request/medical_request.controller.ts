@@ -30,8 +30,8 @@ export class MedicalRequestController {
       if (!query.dateFrom || !query.dateTo)
         throw Error('params dateFrom & dateTo are required');
       return this.medicalRequestService.findByParams({
-        startDate: dayjs(query.dateFrom).toDate(),
-        endDate: dayjs(query.dateTo).toDate(),
+        startDate: dayjs(query.dateFrom, 'DD-MM-YYYY').startOf('d').toDate(),
+        endDate: dayjs(query.dateTo, 'DD-MM-YYYY').endOf('d').toDate(),
       });
     } catch (error) {
       Logger.log(error.message, 'MedicalRequestController.findAll');
