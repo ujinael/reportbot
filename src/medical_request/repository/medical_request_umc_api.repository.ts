@@ -1,7 +1,7 @@
 import { AbstractFindAllRepository } from '@/core';
 import { HttpService } from '@nestjs/axios';
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
-import { lastValueFrom, map, catchError } from 'rxjs';
+import { lastValueFrom, map, catchError, throwError, retry, timer } from 'rxjs';
 import { UMCMedicalRequestDto } from '../dto';
 import { MedicalRequest } from '../entities';
 import { UMCMedicalRequestDtoToMedicalRequestMapper } from '../mappers/umc_medical_request_dto_to_medical_request.mapper';
@@ -33,15 +33,16 @@ export class MedicalRequestUmcApiRepository
           },
         })
         .pipe(
-          catchError((error, resp) => {
-            Logger.error(
-              error.message,
-              'MedicalRequestUmcApiRepository.findAll',
-            );
-            return resp;
+          retry({
+            count: 2,
+            delay: (error) => {
+              Logger.error(
+                error.message,
+                'MedicalRequestUmcApiRepository.findAll',
+              );
+              return timer(1000);
+            },
           }),
-        )
-        .pipe(
           map((resp) =>
             resp.data.map((request) =>
               new UMCMedicalRequestDtoToMedicalRequestMapper(request).mapTo(),

@@ -13,8 +13,7 @@ export class TgMedicalRequestsToEmployersWithRequestsMapper
         pretender.medicalRequests.push(current);
         return prev;
       } else {
-        prev.push({ ...current.employer, medicalRequests: [current] });
-        return prev;
+        return [...prev, { ...current.employer, medicalRequests: [current] }];
       }
     }, []);
   }

@@ -38,6 +38,8 @@ export class TGSchedulleScene {
 
       const employersWithRequests =
         new TgMedicalRequestsToEmployersWithRequestsMapper(requests).mapTo();
+      console.log(employersWithRequests);
+
       ctx.sendMessage(
         `⌛️Расписание на ${startDate.format('DD.MM.YYYY')}\n\n` +
           fromEmployersRequests(employersWithRequests),

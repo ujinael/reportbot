@@ -6,7 +6,7 @@ import { ConfigService } from '@nestjs/config';
 import { CallTouchApiRequestRepository } from './repository';
 import { dayjs } from '@/core';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Between, Repository } from 'typeorm';
+import { Between, Equal, Repository } from 'typeorm';
 import { CallTouchRequest } from './entities/request.entity';
 @Injectable()
 export class RequestsService {
@@ -72,7 +72,38 @@ export class RequestsService {
       );
     }
   }
-
+  async updateRequestsOnCurrentMoment() {
+    try {
+      const $dateFrom = dayjs().endOf('d');
+      const $dateTo = dayjs().startOf('d');
+      const requestFromCalltouch = await this.callTouchApiRepository.findAll(
+        $dateFrom.toDate(),
+        $dateTo.toDate(),
+      );
+      const requestsFromDatabase = await this.callTouchTypeormRepository.find({
+        relations: {
+          client: { phones: true },
+          session: true,
+        },
+        where: {
+          date: Between(
+            $dateFrom.startOf('d').toDate(),
+            $dateTo.endOf('d').toDate(),
+          ),
+        },
+      });
+      const uniqueRequestsByDate = requestFromCalltouch.reduce<
+        CallTouchRequest[]
+      >((accumulator, currentValue) => {
+        const findIntersectValue = requestsFromDatabase.filter(
+          (value) => currentValue.requestId === value.requestId,
+        );
+        if (findIntersectValue.length !== 0) return accumulator;
+        return [...accumulator, currentValue];
+      }, []);
+      await this.callTouchTypeormRepository.save(uniqueRequestsByDate);
+    } catch (error) {}
+  }
   findOne(id: number) {
     return `This action returns a #${id} call`;
   }
