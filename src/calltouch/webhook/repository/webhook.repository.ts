@@ -1,6 +1,6 @@
 import { AbstractPostRepository } from '@/core';
 import { HttpService } from '@nestjs/axios';
-import { HttpStatus, Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { lastValueFrom, map } from 'rxjs';
 import { IncommingCalltouchWebhookDto } from '../dto';
 import { Webhook } from '../entities';
@@ -10,12 +10,16 @@ export class CallTouchWebhookRepository
 {
   constructor(private readonly httpService: HttpService) {}
   async post(inputDto: IncommingCalltouchWebhookDto) {
-    const $reposponse = this.httpService.post<Webhook>(
-      '/calltouch_webhook/lead',
-      inputDto,
-    );
-    const resp = await lastValueFrom($reposponse);
+    try {
+      const $reposponse = this.httpService.post<Webhook>(
+        '/calltouch_webhook/lead',
+        inputDto,
+      );
+      await lastValueFrom($reposponse);
 
-    return HttpStatus.OK;
+      return HttpStatus.OK;
+    } catch (error) {
+      Logger.error(error.message, 'CallTouchWebhookRepository.post');
+    }
   }
 }
