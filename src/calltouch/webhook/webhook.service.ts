@@ -11,9 +11,10 @@ export class WebhookService {
         incommingWebhookDto.leadtype === 'call' &&
         incommingWebhookDto.callphase === 'callconnected'
       )
-        return '';
+        return HttpStatus.OK;
 
-      return this.webhookRepository.post(incommingWebhookDto);
+      this.webhookRepository.post(incommingWebhookDto);
+      return HttpStatus.OK;
     } catch (error) {
       Logger.error(error.message, 'WebhookService.processIncommingWebhook');
       throw new HttpException(
