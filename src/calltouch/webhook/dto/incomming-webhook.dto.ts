@@ -5,10 +5,17 @@ export const WebhookLeadType = {
   CALL: 'call',
 } as const;
 export type WebhookLeadType = PropsType<typeof WebhookLeadType>;
+
+export const WebhookCallPhase = {
+  CALL_CONNECTED: 'callconnected',
+  CALL_DISCONNECTED: 'calldisconnected',
+} as const;
+export type WebhookCallPhase = PropsType<typeof WebhookCallPhase>;
 export interface IncommingCalltouchWebhookDto {
   leadtype: WebhookLeadType;
   changedFields: null | Array<string>;
   callerphone: string;
+  callphase?: WebhookCallPhase;
   requestId?: string;
   requestNumber?: string;
   subject?: string;
