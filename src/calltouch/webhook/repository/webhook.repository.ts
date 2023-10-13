@@ -17,6 +17,7 @@ export class CallTouchWebhookRepository
           map((value) => {
             if (value.status === 500)
               return throwError(() => Error(String(value.data)));
+            else return value;
           }),
         );
       await lastValueFrom($reposponse);
