@@ -12,12 +12,13 @@ import {
   MedicalRequestsToTgMedicalRequests,
   TgMedicalRequestsToEmployersWithRequestsMapper,
 } from '@/bot/mappers';
+import type { AppConfigService } from '@/config';
 
 @Injectable()
 export class DayReportService {
   constructor(
     @InjectBot() private bot: Telegraf<TelegrafContext>,
-    private readonly configService: ConfigService,
+    private readonly configService: AppConfigService,
     private readonly medicalRequestService: MedicalRequestService,
   ) {}
   private readonly logger = new Logger(DayReportService.name);
@@ -25,6 +26,10 @@ export class DayReportService {
   @Cron('00 10 20 * * *')
   async handleCron() {
     try {
+      const allowReports = this.configService.get<boolean>(
+        'report.allowReports',
+      );
+      if (!allowReports) return;
       const chatId = this.configService.get<string>('report.reportChatId');
       const dirPath = this.configService.get<string>('report.reportPath');
       const url = new URL(dirPath);

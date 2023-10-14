@@ -1,4 +1,6 @@
-export default () => ({
+import { SourceKey } from '@/core';
+import { ConfigService } from '@nestjs/config';
+export const configFunction = () => ({
   port: +process.env.PORT,
   jwt: {
     secret: process.env.JWT_SECRET,
@@ -9,6 +11,9 @@ export default () => ({
     authString: process.env.API_AUTH_STRING,
   },
   report: {
+    allowReports: process.env.ALLOW_REPORTS
+      ? Boolean(+process.env.ALLOW_REPORTS)
+      : false,
     reportChatId: process.env.REPORT_CHAT_ID,
     employersChatId: process.env.EMPLOYERS_CHAT_ID,
     testChatId: process.env.TEST_CHAT_ID,
@@ -28,3 +33,9 @@ export default () => ({
     port: +process.env.POSTGRESS_PORT ?? 5432,
   },
 });
+
+export type ConfigType = ReturnType<typeof configFunction>;
+
+export type ServiceType = SourceKey<ConfigType>;
+
+export type AppConfigService = ConfigService<Record<ServiceType, unknown>>;

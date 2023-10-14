@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import config from './config';
+import { configFunction } from './config';
 import { TgBotModule } from './bot/bot.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { ReportModule } from './schedulle/report.module';
@@ -20,7 +20,7 @@ import { typeOrmConfigFactory } from './database_config/type_orm_config';
       envFilePath: `${
         process.env.NODE_ENV === 'production' ? '.production' : '.development'
       }.env`,
-      load: [config],
+      load: [configFunction],
       isGlobal: true,
     }),
     TypeOrmModule.forRootAsync({
