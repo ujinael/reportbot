@@ -1,6 +1,5 @@
-import { SourceKey } from '@/core';
-import { ConfigService } from '@nestjs/config';
-export const configFunction = () => ({
+import { IConfig } from './types';
+const configFunction = async (): Promise<IConfig> => ({
   port: +process.env.PORT,
   jwt: {
     secret: process.env.JWT_SECRET,
@@ -34,8 +33,4 @@ export const configFunction = () => ({
   },
 });
 
-export type ConfigType = ReturnType<typeof configFunction>;
-
-export type ServiceType = SourceKey<ConfigType>;
-
-export type AppConfigService = ConfigService<Record<ServiceType, unknown>>;
+export default configFunction;

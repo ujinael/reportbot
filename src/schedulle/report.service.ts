@@ -1,28 +1,26 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { Cron, Interval } from '@nestjs/schedule';
+import { Cron } from '@nestjs/schedule';
 import { InjectBot } from 'nestjs-telegraf';
-import { TelegrafContext } from 'src/bot/entities/telegraf_context.entity';
+import { TelegrafContext } from '@/bot/entities/telegraf_context.entity';
 import { Telegraf } from 'telegraf';
 import * as fs from 'fs';
-import { allowedNames } from 'src/utils/files.utils';
+import { allowedNames } from '@/utils/files.utils';
 import { MedicalRequestService } from '../medical_request/medical_request.service';
-import { fromEmployersRequests } from 'src/bot/utils/templates';
+import { fromEmployersRequests } from '@/bot/utils/templates';
 import {
   MedicalRequestsToTgMedicalRequests,
   TgMedicalRequestsToEmployersWithRequestsMapper,
 } from '@/bot/mappers';
-import type { AppConfigService } from '@/config';
+import { ServiceType } from '@/config/types';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class DayReportService {
   constructor(
     @InjectBot() private bot: Telegraf<TelegrafContext>,
-    private readonly configService: AppConfigService,
+    private readonly configService: ConfigService<ServiceType>,
     private readonly medicalRequestService: MedicalRequestService,
   ) {}
-  private readonly logger = new Logger(DayReportService.name);
-
   @Cron('00 10 20 * * *')
   async handleCron() {
     try {

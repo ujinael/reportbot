@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { MedicalRequestModule } from 'src/medical_request/medical_request.module';
-import { UserModule } from 'src/user/user.module';
+import { MedicalRequestModule } from '@/medical_request/medical_request.module';
+import { UserModule } from '@/user/user.module';
 import { TGUploadPhotoScene } from './upload_photo.scene';
 import { HttpModule } from '@nestjs/axios';
 

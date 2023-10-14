@@ -1,7 +1,7 @@
 import { Expose, Type } from 'class-transformer';
-import { Client } from 'src/client/entities/client.entity';
-import { Employer } from 'src/employer/entities/employer.entity';
-import { NomenclatureItem } from 'src/nomenclature_item/entities/nomenclature_item.entity';
+import { Client } from '@/client/entities/client.entity';
+import { Employer } from '@/employer/entities/employer.entity';
+import { NomenclatureItem } from '@/nomenclature_item/entities/nomenclature_item.entity';
 
 export class MedicalRequest {
   id: string;

@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { ClientService } from './client.service';
 import { ClientController } from './client.controller';
 import { HttpModule } from '@nestjs/axios';
-import { HttpOneSConfigService } from 'src/http';
+import { HttpOneSConfigService } from '@/http';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Client } from './entities';
 

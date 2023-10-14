@@ -1,7 +1,7 @@
-import { AbstractFindAllRepository } from '@/core';
+import type { AbstractFindAllRepository } from '@/core';
 import { HttpService } from '@nestjs/axios';
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
-import { lastValueFrom, map, catchError, throwError, retry, timer } from 'rxjs';
+import { lastValueFrom, map, retry, timer } from 'rxjs';
 import { UMCMedicalRequestDto } from '../dto';
 import { MedicalRequest } from '../entities';
 import { UMCMedicalRequestDtoToMedicalRequestMapper } from '../mappers/umc_medical_request_dto_to_medical_request.mapper';

@@ -1,6 +1,5 @@
 import { TgEmployerWithRequestsDto } from '@/bot/dto';
-import { MedicalRequest } from 'src/medical_request/entities/medical_request.entity';
-import { NomenclatureItem } from 'src/nomenclature_item/entities/nomenclature_item.entity';
+import { NomenclatureItem } from '@/nomenclature_item/entities/nomenclature_item.entity';
 import { TgMedicalRequestDto } from '../dto';
 
 export const fromEmployersRequests = (

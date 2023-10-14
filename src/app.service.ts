@@ -5,7 +5,7 @@ import { TelegrafContext } from './bot/entities/telegraf_context.entity';
 
 @Injectable()
 export class AppService {
-  constructor(@InjectBot() private bot: Telegraf<TelegrafContext>) {}
+  constructor() {}
 
   getHello(): string {
     return 'Hello World!';

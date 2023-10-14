@@ -1,4 +1,4 @@
-import { CallTouchRequestSession } from 'src/calltouch/requests/entities/request_session.entity';
+import { CallTouchRequestSession } from '@/calltouch/requests/entities/request_session.entity';
 import {
   Column,
   Entity,

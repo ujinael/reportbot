@@ -1,10 +1,10 @@
-import { UserService } from './../../../user/user.service';
+import { UserService } from '@/user/user.service';
 import { Action, Ctx, Message, Scene, SceneEnter } from 'nestjs-telegraf';
 import { SceneContext } from 'telegraf/typings/scenes';
 import { doctorRequestButtons, doctorSceneButtons } from './doctor.buttons';
-import { MedicalRequestService } from 'src/medical_request/medical_request.service';
+import { MedicalRequestService } from '@/medical_request/medical_request.service';
 import { ConfigService } from '@nestjs/config';
-import { fromRequest } from 'src/bot/utils/templates';
+import { fromRequest } from '@/bot/utils/templates';
 import { Logger } from '@nestjs/common';
 @Scene('doctorScene')
 export class TGDoctorScene {

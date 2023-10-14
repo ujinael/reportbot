@@ -4,10 +4,12 @@ import { MedicalRequestController } from './medical_request.controller';
 import { HttpModule } from '@nestjs/axios';
 import { HttpOneSConfigService } from '@/http';
 import { MedicalRequestUmcApiRepository } from './repository';
+import { ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
     HttpModule.registerAsync({
+      inject: [ConfigService],
       useClass: HttpOneSConfigService,
     }),
   ],

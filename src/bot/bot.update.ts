@@ -2,9 +2,9 @@ import { Action, Command, Ctx, Message, Start, Update } from 'nestjs-telegraf';
 import { TelegrafContext } from './entities/telegraf_context.entity';
 import { SceneContext } from 'telegraf/typings/scenes';
 import { ConfigService } from '@nestjs/config';
-import { UserService } from 'src/user/user.service';
+import { UserService } from '@/user/user.service';
 import { registrationButtons } from './utils/buttons';
-import { UserRole } from 'src/user/entities/user.entity';
+import { UserRole } from '@/user/entities/user.entity';
 import { Logger } from '@nestjs/common';
 @Update()
 export class TgBotUpdate {
