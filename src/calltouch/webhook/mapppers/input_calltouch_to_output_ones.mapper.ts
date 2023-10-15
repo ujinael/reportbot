@@ -10,9 +10,10 @@ export class InputCallTouchDtoToOutputOneSDtoMapper
     const dayJsLeadDate = leadDateStr
       ? dayjs(leadDateStr, 'YYYY-MM-DD hh:mm:ss')
       : dayjs();
+    console.log(dayJsLeadDate.format('YYYYMMDDhhmmss'));
 
     return {
-      leadtype: this.dto.leadtype,
+      leadType: this.dto.leadtype,
       callerphone: this.dto.callerphone,
       utm_source: this.dto.utm_source,
       utm_campaign: this.dto.utm_campaign,

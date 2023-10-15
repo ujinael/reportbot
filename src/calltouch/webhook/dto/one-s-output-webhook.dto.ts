@@ -1,8 +1,10 @@
-import { IncommingCalltouchWebhookDto } from './incomming-webhook.dto';
+import type {
+  IncommingCalltouchWebhookDto,
+  WebhookLeadType,
+} from './incomming-webhook.dto';
 
 export type OutputOneSWebhookDto = Pick<
   IncommingCalltouchWebhookDto,
-  | 'leadtype'
   | 'callerphone'
   | 'utm_campaign'
   | 'utm_source'
@@ -12,4 +14,5 @@ export type OutputOneSWebhookDto = Pick<
   | 'requestDate'
 > & {
   leadDate: string;
+  leadType: WebhookLeadType;
 };
