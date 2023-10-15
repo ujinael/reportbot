@@ -12,6 +12,7 @@ export class InputCallTouchDtoToOutputOneSDtoMapper
       : dayjs();
 
     return {
+      leadtype: this.dto.leadtype,
       callerphone: this.dto.callerphone,
       utm_source: this.dto.utm_source,
       utm_campaign: this.dto.utm_campaign,
